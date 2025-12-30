@@ -1,0 +1,59 @@
+{
+  "products": [
+    {
+      "id": 1767089270498,
+      "name": "Silent Offical",
+      "category": "Indoor Series",
+      "sizes": [
+        3,
+        5,
+        7
+      ],
+      "courtType": "Indoor (Pro)",
+      "price": 25,
+      "originalPrice": 25,
+      "rating": 4.5,
+      "image": "/uploads/product_1767089238215.png",
+      "media": [
+        {
+          "type": "video",
+          "url": "/uploads/product_1767089958387_gm1wjd.mp4"
+        },
+        {
+          "type": "image",
+          "url": "/uploads/product_1767089962021_5o2jnr.png"
+        }
+      ],
+      "inStock": true,
+      "createdAt": "2025-12-30T10:07:50.498Z"
+    },
+    {
+      "id": 1767089311414,
+      "name": "Strive for ",
+      "category": "Outdoor Series",
+      "size": 7,
+      "courtType": "Outdoor (Street)",
+      "price": 50,
+      "originalPrice": 50,
+      "rating": 4.5,
+      "image": "/uploads/product_1767089284906.png",
+      "inStock": true,
+      "createdAt": "2025-12-30T10:08:31.414Z"
+    },
+    {
+      "id": 1767089341265,
+      "name": "Pop",
+      "category": "3X3",
+      "size": 6,
+      "courtType": "3x3 Official",
+      "price": 56,
+      "originalPrice": 56,
+      "rating": 4.5,
+      "image": "/uploads/product_1767089324159.png",
+      "inStock": true,
+      "createdAt": "2025-12-30T10:09:01.265Z"
+    }
+  ],
+  "sizes": [],
+  "courtTypes": []
+}
