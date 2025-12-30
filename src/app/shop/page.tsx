@@ -26,6 +26,7 @@ export default function ShopLandingPage() {
   const { totalItems } = useCart();
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [selectedSize, setSelectedSize] = useState<number>(7);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -65,7 +66,7 @@ export default function ShopLandingPage() {
               Shop
             </Link>
           </nav>
-          <button className="md:hidden border border-white/20 bg-background-dark/80 p-2 text-white">
+          <button onClick={() => setMobileMenuOpen(true)} className="md:hidden border border-white/20 bg-background-dark/80 p-2 text-white">
             <span className="material-symbols-outlined">menu</span>
           </button>
           <div className="flex items-center gap-6">
@@ -96,6 +97,42 @@ export default function ShopLandingPage() {
           </div>
         </div>
       </header>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] md:hidden" onClick={() => setMobileMenuOpen(false)} />
+      )}
+
+      {/* Mobile Menu Panel */}
+      <div className={`fixed top-0 right-0 h-full w-72 bg-surface-dark z-[70] md:hidden transform transition-transform duration-300 ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
+        <div className="flex flex-col h-full">
+          <div className="flex items-center justify-between p-6 border-b border-white/10">
+            <span className="text-lg font-bold text-white">Menü</span>
+            <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-400 hover:text-white transition">
+              <span className="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          <div className="flex-1 py-6">
+            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
+              <span className="material-symbols-outlined">home</span>
+              <span className="font-medium">Anasayfa</span>
+            </Link>
+            <Link href="/shop/catalog" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-primary hover:bg-white/5 transition">
+              <span className="material-symbols-outlined">storefront</span>
+              <span className="font-medium">Shop</span>
+            </Link>
+            <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
+              <span className="material-symbols-outlined">info</span>
+              <span className="font-medium">Hakkımızda</span>
+            </Link>
+            <Link href="/cart" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
+              <span className="material-symbols-outlined">shopping_cart</span>
+              <span className="font-medium">Sepet</span>
+              {totalItems > 0 && <span className="ml-auto px-2 py-1 bg-primary text-black text-xs font-bold rounded-full">{totalItems}</span>}
+            </Link>
+          </div>
+        </div>
+      </div>
 
       {/* Main Content */}
       <main className="relative flex-grow flex flex-col pt-32 pb-20 px-6 md:px-12 max-w-[1600px] mx-auto w-full">

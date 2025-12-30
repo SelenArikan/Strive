@@ -65,6 +65,7 @@ export default function ShopPage() {
   const [appliedMinPrice, setAppliedMinPrice] = useState<number | null>(null);
   const [appliedMaxPrice, setAppliedMaxPrice] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [sortBy, setSortBy] = useState("Featured");
   const [currentPage, setCurrentPage] = useState(1);
@@ -181,7 +182,7 @@ export default function ShopPage() {
       {/* Header */}
       <header className="fixed top-0 z-50 w-full backdrop-blur-md bg-slate-50/90 dark:bg-background-dark/90 border-b border-slate-200 dark:border-white/5">
         <div className="px-4 md:px-10 py-3 flex items-center justify-between mx-auto max-w-[1440px]">
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4 md:gap-8">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="size-8 rounded-full bg-primary flex items-center justify-center text-black">
                 <span className="material-symbols-outlined">sports_basketball</span>
@@ -202,7 +203,7 @@ export default function ShopPage() {
               </Link>
             </nav>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <label className="hidden lg:flex flex-col min-w-40 h-10 max-w-64">
               <div className="flex w-full flex-1 items-stretch rounded-full h-full bg-slate-200 dark:bg-surface-dark border dark:border-white/10 transition-shadow">
                 <div className="text-slate-500 dark:text-gray-400 flex items-center justify-center pl-4 rounded-l-full">
@@ -229,9 +230,51 @@ export default function ShopPage() {
                 )}
               </Link>
             </div>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 hover:text-primary transition"
+            >
+              <span className="material-symbols-outlined text-2xl">menu</span>
+            </button>
           </div>
         </div>
       </header>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] md:hidden" onClick={() => setMobileMenuOpen(false)} />
+      )}
+
+      {/* Mobile Menu Panel */}
+      <div className={`fixed top-0 right-0 h-full w-72 bg-surface-dark z-[70] md:hidden transform transition-transform duration-300 ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
+        <div className="flex flex-col h-full">
+          <div className="flex items-center justify-between p-6 border-b border-white/10">
+            <span className="text-lg font-bold text-white">Menü</span>
+            <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-400 hover:text-white transition">
+              <span className="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          <div className="flex-1 py-6">
+            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
+              <span className="material-symbols-outlined">home</span>
+              <span className="font-medium">Anasayfa</span>
+            </Link>
+            <Link href="/shop/catalog" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-primary hover:bg-white/5 transition">
+              <span className="material-symbols-outlined">storefront</span>
+              <span className="font-medium">Shop</span>
+            </Link>
+            <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
+              <span className="material-symbols-outlined">info</span>
+              <span className="font-medium">Hakkımızda</span>
+            </Link>
+            <Link href="/cart" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
+              <span className="material-symbols-outlined">shopping_cart</span>
+              <span className="font-medium">Sepet</span>
+              {totalItems > 0 && <span className="ml-auto px-2 py-1 bg-primary text-black text-xs font-bold rounded-full">{totalItems}</span>}
+            </Link>
+          </div>
+        </div>
+      </div>
 
       {/* Main Content */}
       <main className="flex-grow pt-[80px] pb-12 px-4 md:px-8">
