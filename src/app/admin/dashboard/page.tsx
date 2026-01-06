@@ -13,7 +13,8 @@ interface MediaItem {
 interface Product {
     id: number;
     name: string;
-    category: string;
+    mainCategory: string; // Ana kategori: Basketbol Topu, Mat, vs.
+    category: string; // Alt kategori: Indoor Series, Outdoor Series, vs.
     sizes: number[];
     courtType: string;
     price: number;
@@ -40,6 +41,7 @@ export default function AdminDashboard() {
     // Form state
     const [formData, setFormData] = useState({
         name: "",
+        mainCategory: "Basketbol Topu",
         category: "",
         sizes: [7] as number[],
         courtType: "Indoor (Pro)",
@@ -101,6 +103,7 @@ export default function AdminDashboard() {
     const resetForm = () => {
         setFormData({
             name: "",
+            mainCategory: "Basketbol Topu",
             category: "",
             sizes: [7],
             courtType: "Indoor (Pro)",
@@ -120,6 +123,7 @@ export default function AdminDashboard() {
         setEditingProduct(product);
         setFormData({
             name: product.name,
+            mainCategory: product.mainCategory || "Basketbol Topu",
             category: product.category,
             sizes: product.sizes || [7],
             courtType: product.courtType,
@@ -214,6 +218,7 @@ export default function AdminDashboard() {
         const productData: Product = {
             id: editingProduct?.id || Date.now(),
             name: formData.name,
+            mainCategory: formData.mainCategory,
             category: formData.category,
             sizes: formData.sizes,
             courtType: formData.courtType,
@@ -321,7 +326,7 @@ export default function AdminDashboard() {
                         </Link>
                         <Link href="/shop/catalog" className="text-gray-400 hover:text-white text-sm flex items-center gap-1">
                             <span className="material-symbols-outlined text-lg">storefront</span>
-                            Shop
+                            Mağaza
                         </Link>
                         <button
                             onClick={handleLogout}
@@ -541,16 +546,32 @@ export default function AdminDashboard() {
                                         )}
                                     </div>
 
-                                    {/* Category */}
+                                    {/* Main Category */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Kategori *</label>
+                                        <label className="block text-sm font-medium text-gray-300 mb-1">Ana Kategori *</label>
+                                        <select
+                                            value={formData.mainCategory}
+                                            onChange={(e) => setFormData({ ...formData, mainCategory: e.target.value })}
+                                            className="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary"
+                                            required
+                                        >
+                                            <option value="Basketbol Topu">Basketbol Topu</option>
+                                            <option value="Mat">Mat</option>
+                                            <option value="Aksesuar">Aksesuar</option>
+                                            <option value="Giyim">Giyim</option>
+                                            <option value="Antrenman Ekipmanları">Antrenman Ekipmanları</option>
+                                        </select>
+                                    </div>
+
+                                    {/* Sub Category */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-300 mb-1">Alt Kategori</label>
                                         <input
                                             type="text"
                                             value={formData.category}
                                             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                                             className="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary"
-                                            placeholder="Örn: Indoor Series"
-                                            required
+                                            placeholder="Örn: Indoor Series, Outdoor Series"
                                         />
                                     </div>
 
@@ -569,8 +590,8 @@ export default function AdminDashboard() {
                                                     type="button"
                                                     onClick={() => toggleSize(size.value)}
                                                     className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${formData.sizes.includes(size.value)
-                                                            ? "bg-primary border-primary text-black"
-                                                            : "bg-background-dark border-white/10 text-white hover:border-primary/50"
+                                                        ? "bg-primary border-primary text-black"
+                                                        : "bg-background-dark border-white/10 text-white hover:border-primary/50"
                                                         }`}
                                                 >
                                                     {size.label}
@@ -772,11 +793,11 @@ export default function AdminDashboard() {
                                         <td className="px-6 py-4">
                                             {product.originalPrice && product.originalPrice > product.price ? (
                                                 <div>
-                                                    <span className="text-gray-500 text-xs line-through">${product.originalPrice.toFixed(2)}</span>
-                                                    <span className="text-red-400 font-medium ml-2">${product.price.toFixed(2)}</span>
+                                                    <span className="text-gray-500 text-xs line-through">₺{product.originalPrice.toFixed(2)}</span>
+                                                    <span className="text-red-400 font-medium ml-2">₺{product.price.toFixed(2)}</span>
                                                 </div>
                                             ) : (
-                                                <span className="text-primary font-medium">${product.price.toFixed(2)}</span>
+                                                <span className="text-primary font-medium">₺{product.price.toFixed(2)}</span>
                                             )}
                                         </td>
                                         <td className="px-6 py-4">

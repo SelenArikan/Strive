@@ -4,9 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "@/components/Header";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function CartPage() {
   const { items, removeFromCart, updateQuantity, totalItems, subtotal } = useCart();
+  const { t } = useLanguage();
   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + tax;
 
@@ -17,11 +19,11 @@ export default function CartPage() {
       <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-20">
         {/* Page Heading */}
         <div className="mb-8">
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-2">Your Cart</h2>
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-2">{t('cart.yourCart')}</h2>
           <p className="text-gray-500 dark:text-gray-400 font-medium">
             {totalItems > 0
-              ? `You have ${totalItems} item${totalItems > 1 ? "s" : ""} in your cart ready for checkout.`
-              : "Your cart is empty."}
+              ? t('cart.itemsInCart').replace('{count}', totalItems.toString())
+              : t('cart.emptyCart')}
           </p>
         </div>
 
@@ -31,14 +33,14 @@ export default function CartPage() {
             <div className="size-24 mx-auto mb-6 bg-gray-100 dark:bg-surface-dark rounded-full flex items-center justify-center">
               <span className="material-symbols-outlined text-5xl text-gray-400">shopping_cart</span>
             </div>
-            <h3 className="text-xl font-bold mb-2">Your cart is empty</h3>
-            <p className="text-gray-500 mb-6">Looks like you haven&apos;t added any items yet.</p>
+            <h3 className="text-xl font-bold mb-2">{t('cart.emptyCart')}</h3>
+            <p className="text-gray-500 mb-6">{t('cart.noItemsYet')}</p>
             <Link
               href="/shop"
               className="inline-flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary-light text-black font-bold rounded-xl transition-colors"
             >
               <span className="material-symbols-outlined">storefront</span>
-              Browse Products
+              {t('cart.browseProducts')}
             </Link>
           </div>
         ) : (
@@ -71,9 +73,9 @@ export default function CartPage() {
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-lg font-bold">${item.price.toFixed(2)}</p>
+                        <p className="text-lg font-bold">₺{item.price.toFixed(2)}</p>
                         {item.originalPrice && (
-                          <p className="text-xs text-gray-400 line-through">${item.originalPrice.toFixed(2)}</p>
+                          <p className="text-xs text-gray-400 line-through">₺{item.originalPrice.toFixed(2)}</p>
                         )}
                       </div>
                     </div>
@@ -108,13 +110,13 @@ export default function CartPage() {
                           className="text-sm font-medium text-red-500 hover:text-red-600 flex items-center gap-1 transition-colors"
                         >
                           <span className="material-symbols-outlined text-[18px]">delete</span>
-                          <span className="hidden sm:inline">Remove</span>
+                          <span className="hidden sm:inline">{t('common.remove')}</span>
                         </button>
                       </div>
 
                       <div className="text-right">
-                        <span className="text-xs text-gray-400">Total</span>
-                        <p className="font-bold text-primary">${(item.price * item.quantity).toFixed(2)}</p>
+                        <span className="text-xs text-gray-400">{t('common.total')}</span>
+                        <p className="font-bold text-primary">₺{(item.price * item.quantity).toFixed(2)}</p>
                       </div>
                     </div>
                   </div>
@@ -124,11 +126,11 @@ export default function CartPage() {
               {/* Continue Shopping Link */}
               <div className="mt-2">
                 <Link
-                  href="/shop"
+                  href="/shop/catalog"
                   className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-primary transition-colors"
                 >
                   <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-                  Continue Shopping
+                  {t('common.continueShopping')}
                 </Link>
               </div>
             </div>
@@ -137,35 +139,35 @@ export default function CartPage() {
             <div className="lg:col-span-4">
               <div className="sticky top-28">
                 <div className="bg-white dark:bg-surface-dark rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-white/5">
-                  <h3 className="text-xl font-bold mb-6">Order Summary</h3>
+                  <h3 className="text-xl font-bold mb-6">{t('cart.orderSummary')}</h3>
 
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600 dark:text-gray-400 text-sm">Subtotal ({totalItems} items)</span>
-                      <span className="font-semibold">${subtotal.toFixed(2)}</span>
+                      <span className="text-gray-600 dark:text-gray-400 text-sm">{t('cart.subtotal')} ({totalItems} {t('cart.items')})</span>
+                      <span className="font-semibold">₺{subtotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600 dark:text-gray-400 text-sm">Shipping estimate</span>
-                      <span className="font-semibold text-primary text-sm">Free</span>
+                      <span className="text-gray-600 dark:text-gray-400 text-sm">{t('cart.shippingEstimate')}</span>
+                      <span className="font-semibold text-primary text-sm">{t('cart.free')}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600 dark:text-gray-400 text-sm">Tax estimate</span>
-                      <span className="font-semibold">${tax.toFixed(2)}</span>
+                      <span className="text-gray-600 dark:text-gray-400 text-sm">{t('cart.taxEstimate')}</span>
+                      <span className="font-semibold">₺{tax.toFixed(2)}</span>
                     </div>
 
                     {/* Discount Code Input */}
                     <div className="pt-2">
                       <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 block">
-                        Gift Card / Promo Code
+                        {t('cart.giftCard')}
                       </label>
                       <div className="flex gap-2">
                         <input
                           className="flex-1 bg-slate-100 dark:bg-background-dark border border-gray-200 dark:border-white/10 rounded-lg text-sm px-3 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-shadow"
-                          placeholder="Code"
+                          placeholder={t('cart.code')}
                           type="text"
                         />
                         <button className="px-4 py-2 bg-gray-200 dark:bg-white/10 text-sm font-semibold rounded-lg hover:bg-gray-300 dark:hover:bg-white/20 transition-colors">
-                          Apply
+                          {t('common.apply')}
                         </button>
                       </div>
                     </div>
@@ -174,10 +176,10 @@ export default function CartPage() {
                   <div className="my-6 border-t border-dashed border-gray-200 dark:border-white/10"></div>
 
                   <div className="flex justify-between items-end mb-8">
-                    <span className="text-lg font-bold">Order Total</span>
+                    <span className="text-lg font-bold">{t('cart.orderTotal')}</span>
                     <div className="text-right">
-                      <span className="text-2xl font-black tracking-tight">${total.toFixed(2)}</span>
-                      <p className="text-xs text-gray-400 mt-1">USD</p>
+                      <span className="text-2xl font-black tracking-tight">₺{total.toFixed(2)}</span>
+                      <p className="text-xs text-gray-400 mt-1">{t('common.currency')}</p>
                     </div>
                   </div>
 
@@ -202,19 +204,19 @@ export default function CartPage() {
                       items.forEach((item, index) => {
                         message += `${index + 1}. ${item.name} (${item.category})\n`;
                         message += `   Size: ${item.size || "Std"} | Adet: ${item.quantity}\n`;
-                        message += `   Fiyat: $${item.price.toFixed(2)}\n\n`;
+                        message += `   Fiyat: ₺${item.price.toFixed(2)}\n\n`;
                       });
 
-                      message += `*Toplam Tutar: $${total.toFixed(2)}* (Vergi dahil)\n\n`;
+                      message += `*Toplam Tutar: ₺${total.toFixed(2)}* (Vergi dahil)\n\n`;
                       message += `Siparişimi onaylamak istiyorum.`;
 
                       // 3. Redirect to WhatsApp
                       const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
                       window.open(whatsappUrl, "_blank");
                     }}
-                    className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded-xl shadow-lg shadow-green-500/20 hover:shadow-green-500/40 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 group"
+                    className="w-full bg-[#25D366] hover:bg-primary text-white font-bold py-4 rounded-xl shadow-lg shadow-green-500/20 hover:shadow-primary/40 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 group"
                   >
-                    <span>WhatsApp ile Satın Al</span>
+                    <span>{t('product.buyWithWhatsApp')}</span>
                     <span className="text-2xl" style={{ fontFamily: "Arial" }}>💬</span>
                   </button>
 
@@ -228,7 +230,7 @@ export default function CartPage() {
                 {/* Security Badge */}
                 <div className="mt-6 flex items-center justify-center gap-2 text-gray-400 text-xs">
                   <span className="material-symbols-outlined text-sm">verified_user</span>
-                  <span>Secure Checkout with 256-bit SSL</span>
+                  <span>{t('cart.secureCheckout').replace('{bits}', '256')}</span>
                 </div>
               </div>
             </div>
@@ -238,3 +240,7 @@ export default function CartPage() {
     </div>
   );
 }
+
+
+
+

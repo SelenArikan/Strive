@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/hooks/useLanguage";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -22,6 +23,7 @@ interface HeaderProps {
 
 export default function Header({ hideSearch = false }: HeaderProps) {
   const { totalItems } = useCart();
+  const { t, locale, setLocale } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -90,13 +92,13 @@ export default function Header({ hideSearch = false }: HeaderProps) {
             {/* Navigation Links - Desktop */}
             <div className="hidden md:flex space-x-12 items-center">
               <Link href="/" className="text-base font-medium text-white hover:text-primary transition">
-                Anasayfa
+                {t('nav.home')}
               </Link>
               <Link href="/about" className="text-base font-medium text-gray-300 hover:text-primary transition">
-                Hakkımızda
+                {t('nav.about')}
               </Link>
               <Link href="/shop" className="text-base font-medium text-gray-300 hover:text-primary transition">
-                Shop
+                {t('nav.shop')}
               </Link>
             </div>
 
@@ -117,15 +119,15 @@ export default function Header({ hideSearch = false }: HeaderProps) {
                       <div className="p-3 border-b border-white/10">
                         <input
                           className="w-full px-4 py-2 rounded-lg bg-background-dark border border-white/10 text-white placeholder:text-gray-500 text-sm focus:outline-none focus:border-primary"
-                          placeholder="Search products..."
+                          placeholder={t('common.search')}
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           autoFocus
                         />
                       </div>
                       <div className="px-4 py-2 flex justify-between items-center text-xs text-gray-400 border-b border-white/10">
-                        <span className="font-bold uppercase tracking-wider">Top Suggestions</span>
-                        <span>{filteredProducts.length} matches found</span>
+                        <span className="font-bold uppercase tracking-wider">{t('header.suggestions')}</span>
+                        <span>{filteredProducts.length} {t('header.foundResults')}</span>
                       </div>
 
                       <div className="flex flex-col max-h-[300px] overflow-y-auto">
@@ -158,13 +160,13 @@ export default function Header({ hideSearch = false }: HeaderProps) {
                                 </div>
                               </div>
                               <span className="text-sm font-bold text-primary whitespace-nowrap">
-                                ${product.price.toFixed(2)}
+                                ₺{product.price.toFixed(2)}
                               </span>
                             </div>
                           ))
                         ) : (
                           <div className="px-4 py-6 text-center text-gray-500 text-sm">
-                            No products found.
+                            {t('header.noProducts')}
                           </div>
                         )}
                       </div>
@@ -174,7 +176,7 @@ export default function Header({ hideSearch = false }: HeaderProps) {
                           onClick={handleViewAll}
                           className="w-full py-3 bg-primary hover:bg-green-400 text-black font-bold text-sm rounded-lg flex items-center justify-center gap-2 transition-colors"
                         >
-                          View all products
+                          {t('common.viewAllProducts')}
                           <span className="material-symbols-outlined text-sm">arrow_forward</span>
                         </button>
                       </div>
@@ -182,6 +184,28 @@ export default function Header({ hideSearch = false }: HeaderProps) {
                   )}
                 </div>
               )}
+
+              {/* Language Switcher */}
+              <div className="flex items-center gap-1 border border-white/10 rounded-lg p-1">
+                <button
+                  onClick={() => setLocale('tr')}
+                  className={`px-3 py-1.5 rounded text-xs font-bold uppercase transition-all ${locale === 'tr'
+                    ? 'bg-primary text-black'
+                    : 'text-gray-400 hover:text-white'
+                    }`}
+                >
+                  TR
+                </button>
+                <button
+                  onClick={() => setLocale('en')}
+                  className={`px-3 py-1.5 rounded text-xs font-bold uppercase transition-all ${locale === 'en'
+                    ? 'bg-primary text-black'
+                    : 'text-gray-400 hover:text-white'
+                    }`}
+                >
+                  EN
+                </button>
+              </div>
 
               {/* Cart */}
               <Link href="/cart" className="relative group cursor-pointer">
@@ -224,7 +248,7 @@ export default function Header({ hideSearch = false }: HeaderProps) {
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-white/10">
-            <span className="text-lg font-bold text-white">Menü</span>
+            <span className="text-lg font-bold text-white">{t('header.menu')}</span>
             <button
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 text-gray-400 hover:text-white transition"
@@ -241,7 +265,7 @@ export default function Header({ hideSearch = false }: HeaderProps) {
               className="flex items-center gap-4 px-6 py-4 text-white hover:bg-white/5 hover:text-primary transition"
             >
               <span className="material-symbols-outlined">home</span>
-              <span className="font-medium">Anasayfa</span>
+              <span className="font-medium">{t('nav.home')}</span>
             </Link>
             <Link
               href="/shop"
@@ -249,7 +273,7 @@ export default function Header({ hideSearch = false }: HeaderProps) {
               className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition"
             >
               <span className="material-symbols-outlined">storefront</span>
-              <span className="font-medium">Shop</span>
+              <span className="font-medium">{t('nav.shop')}</span>
             </Link>
             <Link
               href="/about"
@@ -257,7 +281,7 @@ export default function Header({ hideSearch = false }: HeaderProps) {
               className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition"
             >
               <span className="material-symbols-outlined">info</span>
-              <span className="font-medium">Hakkımızda</span>
+              <span className="font-medium">{t('nav.about')}</span>
             </Link>
             <Link
               href="/cart"
@@ -265,13 +289,37 @@ export default function Header({ hideSearch = false }: HeaderProps) {
               className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition"
             >
               <span className="material-symbols-outlined">shopping_cart</span>
-              <span className="font-medium">Sepet</span>
+              <span className="font-medium">{t('nav.cart')}</span>
               {totalItems > 0 && (
                 <span className="ml-auto px-2 py-1 bg-primary text-black text-xs font-bold rounded-full">
                   {totalItems}
                 </span>
               )}
             </Link>
+
+            {/* Language Switcher - Mobile */}
+            <div className="px-6 py-4">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setLocale('tr')}
+                  className={`flex-1 px-4 py-3 rounded-lg text-sm font-bold uppercase transition-all ${locale === 'tr'
+                    ? 'bg-primary text-black'
+                    : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
+                    }`}
+                >
+                  Türkçe
+                </button>
+                <button
+                  onClick={() => setLocale('en')}
+                  className={`flex-1 px-4 py-3 rounded-lg text-sm font-bold uppercase transition-all ${locale === 'en'
+                    ? 'bg-primary text-black'
+                    : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
+                    }`}
+                >
+                  English
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Footer */}
@@ -284,7 +332,7 @@ export default function Header({ hideSearch = false }: HeaderProps) {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 }

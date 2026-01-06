@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import Footer from "@/components/Footer";
 
 const showcaseItems = [
     {
@@ -44,13 +45,13 @@ export default function ShowcasePage() {
                         </Link>
                         <nav className="hidden md:flex items-center gap-8">
                             <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
-                                Home
+                                Anasayfa
                             </Link>
                             <Link href="/shop" className="text-sm font-medium hover:text-primary transition-colors">
-                                Shop
+                                Mağaza
                             </Link>
                             <Link href="/showcase" className="text-sm font-bold text-primary transition-colors">
-                                Showcase
+                                Vitrin
                             </Link>
                         </nav>
                     </div>
@@ -73,13 +74,13 @@ export default function ShowcasePage() {
                     {/* Page Header */}
                     <div className="text-center py-16">
                         <span className="inline-block px-4 py-1 rounded-full bg-primary/10 text-primary text-sm font-bold mb-4 uppercase tracking-wider">
-                            Collection
+                            Koleksiyon
                         </span>
                         <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4">
-                            Our Showcase
+                            Vitrinimiz
                         </h1>
                         <p className="text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
-                            Discover the premium basketballs that define excellence on every court.
+                            Her sahada mükemmelliği tanımlayan premium basketbol toplarını keşfedin.
                         </p>
                     </div>
 
@@ -135,7 +136,7 @@ export default function ShowcasePage() {
                             href="/shop"
                             className="inline-flex items-center gap-2 px-8 py-4 bg-primary hover:bg-primary-light text-black font-bold rounded-full transition-all hover:gap-3"
                         >
-                            Browse All Products
+                            Tüm Ürünleri Görüntüle
                             <span className="material-symbols-outlined">arrow_forward</span>
                         </Link>
                     </div>
@@ -143,15 +144,7 @@ export default function ShowcasePage() {
             </main>
 
             {/* Footer */}
-            <footer className="bg-white dark:bg-black border-t border-slate-200 dark:border-white/10 py-8 px-4">
-                <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500 dark:text-gray-600">
-                    <p>© 2024 Strive. All rights reserved.</p>
-                    <div className="flex gap-6">
-                        <Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link>
-                        <Link href="#" className="hover:text-primary transition-colors">Terms of Service</Link>
-                    </div>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 }

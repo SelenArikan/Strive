@@ -4,10 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/hooks/useLanguage";
+import { useSearchParams } from "next/navigation";
+import Footer from "@/components/Footer";
 
 interface Product {
   id: number;
   name: string;
+  mainCategory: string;
   category: string;
   size: number;
   courtType: string;
@@ -53,6 +57,7 @@ const getDiscountPercent = (product: Product) => {
 };
 
 export default function ShopPage() {
+  const { t, locale, setLocale } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
@@ -66,10 +71,27 @@ export default function ShopPage() {
   const [appliedMaxPrice, setAppliedMaxPrice] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedMainCategory, setSelectedMainCategory] = useState<string | null>(null);
 
-  const [sortBy, setSortBy] = useState("Featured");
+  const searchParams = useSearchParams();
+
+  const [sortBy, setSortBy] = useState(t('catalog.featured'));
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 9;
+
+  // Read category and mainCategory from URL params
+  useEffect(() => {
+    const categoryParam = searchParams.get("category");
+    const mainCategoryParam = searchParams.get("mainCategory");
+
+    if (categoryParam) {
+      setSelectedCategory(categoryParam);
+    }
+    if (mainCategoryParam) {
+      setSelectedMainCategory(mainCategoryParam);
+    }
+  }, [searchParams]);
 
   // Fetch products from API
   useEffect(() => {
@@ -127,6 +149,16 @@ export default function ShopPage() {
 
   const filteredSortedProducts = products
     .filter((product) => {
+      // Main Category Filter (from URL)
+      if (selectedMainCategory && product.mainCategory !== selectedMainCategory) {
+        return false;
+      }
+
+      // Category Filter (from URL)
+      if (selectedCategory && product.category !== selectedCategory) {
+        return false;
+      }
+
       // Search Filter
       if (searchQuery && !product.name.toLowerCase().includes(searchQuery.toLowerCase()) && !product.category.toLowerCase().includes(searchQuery.toLowerCase())) {
         return false;
@@ -154,13 +186,13 @@ export default function ShopPage() {
     })
     .sort((a, b) => {
       switch (sortBy) {
-        case "Price: Low to High":
+        case t('catalog.priceLowHigh'):
           return a.price - b.price;
-        case "Price: High to Low":
+        case t('catalog.priceHighLow'):
           return b.price - a.price;
-        case "Newest Arrivals":
+        case t('catalog.newestArrivals'):
           return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
-        default: // Featured
+        default: // Öne Çıkanlar / Featured
           return b.rating - a.rating;
       }
     });
@@ -193,13 +225,13 @@ export default function ShopPage() {
             </Link>
             <nav className="hidden md:flex items-center gap-8">
               <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
-                Anasayfa
+                {t('nav.home')}
               </Link>
               <Link href="/about" className="text-sm font-medium hover:text-primary transition-colors">
-                Hakkımızda
+                {t('nav.about')}
               </Link>
               <Link href="/shop" className="text-sm font-bold text-primary transition-colors">
-                Shop
+                {t('nav.shop')}
               </Link>
             </nav>
           </div>
@@ -211,12 +243,33 @@ export default function ShopPage() {
                 </div>
                 <input
                   className="flex w-full min-w-0 flex-1 bg-transparent border-none placeholder:text-slate-500 dark:placeholder:text-gray-500 px-3 focus:ring-0 text-sm font-normal rounded-r-full outline-none"
-                  placeholder="Search products..."
+                  placeholder={t('common.search')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
             </label>
+            {/* Language Switcher */}
+            <div className="hidden lg:flex items-center gap-1 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-surface-dark rounded-lg p-1">
+              <button
+                onClick={() => setLocale('tr')}
+                className={`px-3 py-1.5 rounded text-xs font-bold uppercase transition-all ${locale === 'tr'
+                  ? 'bg-primary text-black'
+                  : 'text-slate-500 dark:text-gray-400 hover:text-black dark:hover:text-white'
+                  }`}
+              >
+                TR
+              </button>
+              <button
+                onClick={() => setLocale('en')}
+                className={`px-3 py-1.5 rounded text-xs font-bold uppercase transition-all ${locale === 'en'
+                  ? 'bg-primary text-black'
+                  : 'text-slate-500 dark:text-gray-400 hover:text-black dark:hover:text-white'
+                  }`}
+              >
+                EN
+              </button>
+            </div>
             <div className="flex gap-2">
               <Link
                 href="/cart"
@@ -249,7 +302,7 @@ export default function ShopPage() {
       <div className={`fixed top-0 right-0 h-full w-72 bg-surface-dark z-[70] md:hidden transform transition-transform duration-300 ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between p-6 border-b border-white/10">
-            <span className="text-lg font-bold text-white">Menü</span>
+            <span className="text-lg font-bold text-white">{t('header.menu')}</span>
             <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-400 hover:text-white transition">
               <span className="material-symbols-outlined">close</span>
             </button>
@@ -257,21 +310,46 @@ export default function ShopPage() {
           <div className="flex-1 py-6">
             <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
               <span className="material-symbols-outlined">home</span>
-              <span className="font-medium">Anasayfa</span>
+              <span className="font-medium">{t('nav.home')}</span>
             </Link>
             <Link href="/shop/catalog" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-primary hover:bg-white/5 transition">
               <span className="material-symbols-outlined">storefront</span>
-              <span className="font-medium">Shop</span>
+              <span className="font-medium">{t('nav.shop')}</span>
             </Link>
             <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
               <span className="material-symbols-outlined">info</span>
-              <span className="font-medium">Hakkımızda</span>
+              <span className="font-medium">{t('nav.about')}</span>
             </Link>
             <Link href="/cart" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
               <span className="material-symbols-outlined">shopping_cart</span>
-              <span className="font-medium">Sepet</span>
+              <span className="font-medium">{t('nav.cart')}</span>
               {totalItems > 0 && <span className="ml-auto px-2 py-1 bg-primary text-black text-xs font-bold rounded-full">{totalItems}</span>}
             </Link>
+
+            {/* Language Switcher - Mobile */}
+            <div className="px-6 py-4 border-t border-white/10">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setLocale('tr')}
+                  className={`flex-1 px-4 py-3 rounded-lg text-sm font-bold uppercase transition-all ${locale === 'tr'
+                    ? 'bg-primary text-black'
+                    : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
+                    }`}
+                >
+                  Türkçe
+                </button>
+                <button
+                  onClick={() => setLocale('en')}
+                  className={`flex-1 px-4 py-3 rounded-lg text-sm font-bold uppercase transition-all ${locale === 'en'
+                    ? 'bg-primary text-black'
+                    : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
+                    }`}
+                >
+                  English
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -283,25 +361,25 @@ export default function ShopPage() {
           <div className="flex flex-col md:flex-row justify-between items-end gap-4 pb-6 border-b border-slate-200 dark:border-white/10">
             <div>
               <nav className="flex text-sm text-slate-500 mb-2">
-                <Link href="/" className="hover:text-primary">Home</Link>
+                <Link href="/" className="hover:text-primary">{t('nav.home')}</Link>
                 <span className="mx-2">/</span>
-                <span className="font-medium text-slate-900 dark:text-white">Shop All</span>
+                <span className="font-medium text-slate-900 dark:text-white">{t('shop.shopAll')}</span>
               </nav>
-              <h1 className="text-3xl md:text-4xl font-black tracking-tight">Basketballs</h1>
-              <p className="mt-2 text-slate-500 dark:text-gray-400">Premium gear for indoor courts and outdoor streets.</p>
+              <h1 className="text-3xl md:text-4xl font-black tracking-tight">{t('shop.basketballs')}</h1>
+              <p className="mt-2 text-slate-500 dark:text-gray-400">{t('shop.premiumGear')}</p>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-slate-500 whitespace-nowrap">Sort by:</span>
+              <span className="text-sm font-medium text-slate-500 whitespace-nowrap">{t('catalog.sortBy')}</span>
               <div className="relative">
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                   className="appearance-none bg-white dark:bg-surface-dark border border-slate-200 dark:border-white/10 text-sm rounded-lg focus:ring-primary focus:border-primary block w-48 p-2.5 pr-8 outline-none"
                 >
-                  <option>Featured</option>
-                  <option>Price: Low to High</option>
-                  <option>Price: High to Low</option>
-                  <option>Newest Arrivals</option>
+                  <option>{t('catalog.featured')}</option>
+                  <option>{t('catalog.priceLowHigh')}</option>
+                  <option>{t('catalog.priceHighLow')}</option>
+                  <option>{t('catalog.newestArrivals')}</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
                   <span className="material-symbols-outlined text-sm">expand_more</span>
@@ -318,7 +396,7 @@ export default function ShopPage() {
                 onClick={() => setShowFilters(!showFilters)}
                 className="lg:hidden w-full flex items-center justify-between p-4 bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-white/10 font-bold"
               >
-                <span>Filters</span>
+                <span>{t('catalog.filters')}</span>
                 <span className="material-symbols-outlined">filter_list</span>
               </button>
 
@@ -326,7 +404,7 @@ export default function ShopPage() {
               <div className={`${showFilters ? 'flex' : 'hidden'} lg:flex flex-col gap-8`}>
                 {/* Court Type Filter */}
                 <div>
-                  <h3 className="text-sm font-bold uppercase tracking-wider mb-4">Court Type</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-wider mb-4">{t('catalog.courtType')}</h3>
                   <div className="space-y-3">
                     {courtTypes.map((type, index) => (
                       <button
@@ -355,7 +433,7 @@ export default function ShopPage() {
 
                 {/* Size Filter */}
                 <div>
-                  <h3 className="text-sm font-bold uppercase tracking-wider mb-4">Size</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-wider mb-4">{t('catalog.size')}</h3>
                   <div className="space-y-3">
                     {sizes.map((size, index) => (
                       <button
@@ -384,16 +462,16 @@ export default function ShopPage() {
 
                 {/* Price Range Filter */}
                 <div>
-                  <h3 className="text-sm font-bold uppercase tracking-wider mb-4">Price Range</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-wider mb-4">{t('catalog.priceRange')}</h3>
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="relative flex-1">
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-sm">$</span>
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-sm">₺</span>
                         <input
                           type="text"
                           inputMode="numeric"
                           pattern="[0-9]*"
-                          placeholder="Min"
+                          placeholder={t('catalog.min')}
                           value={minPrice}
                           onChange={(e) => setMinPrice(e.target.value.replace(/[^0-9]/g, ''))}
                           className="w-full bg-surface-dark border border-white/10 text-sm rounded-lg focus:ring-1 focus:ring-primary focus:border-primary pl-7 pr-3 py-2.5 outline-none text-white placeholder-slate-500"
@@ -401,12 +479,12 @@ export default function ShopPage() {
                       </div>
                       <span className="text-slate-500 font-medium">—</span>
                       <div className="relative flex-1">
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-sm">$</span>
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-sm">₺</span>
                         <input
                           type="text"
                           inputMode="numeric"
                           pattern="[0-9]*"
-                          placeholder="Max"
+                          placeholder={t('catalog.max')}
                           value={maxPrice}
                           onChange={(e) => setMaxPrice(e.target.value.replace(/[^0-9]/g, ''))}
                           className="w-full bg-surface-dark border border-white/10 text-sm rounded-lg focus:ring-1 focus:ring-primary focus:border-primary pl-7 pr-3 py-2.5 outline-none text-white placeholder-slate-500"
@@ -417,7 +495,7 @@ export default function ShopPage() {
                       onClick={handlePriceApply}
                       className="w-full py-2.5 bg-primary hover:bg-primary-light text-black text-sm font-bold rounded-lg transition-colors"
                     >
-                      Apply
+                      {t('common.apply')}
                     </button>
                   </div>
                 </div>
@@ -432,10 +510,10 @@ export default function ShopPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 p-6">
-                    <span className="text-primary font-bold text-xs uppercase tracking-wider mb-2 block">New Season</span>
-                    <h4 className="text-white text-2xl font-black leading-none mb-2">Midnight Series</h4>
-                    <p className="text-slate-300 text-sm mb-4">Limited edition night court basketballs.</p>
-                    <span className="text-white text-sm font-bold underline underline-offset-4 decoration-primary decoration-2">Shop Now</span>
+                    <span className="text-primary font-bold text-xs uppercase tracking-wider mb-2 block">{t('catalog.newSeason')}</span>
+                    <h4 className="text-white text-2xl font-black leading-none mb-2">{t('catalog.nightSeries')}</h4>
+                    <p className="text-slate-300 text-sm mb-4">{t('catalog.limitedEdition')}</p>
+                    <span className="text-white text-sm font-bold underline underline-offset-4 decoration-primary decoration-2">{t('common.shopNow')}</span>
                   </div>
                 </div>
               </div>
@@ -483,14 +561,14 @@ export default function ShopPage() {
                           {/* Price with discount styling */}
                           {getDiscountPercent(product) > 0 ? (
                             <>
-                              <span className="text-sm line-through text-slate-400">${product.originalPrice?.toFixed(2)}</span>
-                              <span className="text-xl font-bold text-red-500">${product.price.toFixed(2)}</span>
+                              <span className="text-sm line-through text-slate-400">₺{product.originalPrice?.toFixed(2)}</span>
+                              <span className="text-xl font-bold text-red-500">₺{product.price.toFixed(2)}</span>
                               <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
                                 -{getDiscountPercent(product)}%
                               </span>
                             </>
                           ) : (
-                            <span className="text-xl font-bold">${product.price.toFixed(2)}</span>
+                            <span className="text-xl font-bold">₺{product.price.toFixed(2)}</span>
                           )}
                         </div>
                         <div className="flex items-center gap-1 text-xs text-amber-400">
@@ -511,7 +589,7 @@ export default function ShopPage() {
                         <span className="material-symbols-outlined text-[18px]">
                           {addedItems.includes(product.id) ? "check" : "add_shopping_cart"}
                         </span>
-                        {addedItems.includes(product.id) ? "Eklendi!" : "Sepete Ekle"}
+                        {addedItems.includes(product.id) ? t('common.added') : t('common.addToCart')}
                       </button>
                     </div>
                   </div>
@@ -559,53 +637,7 @@ export default function ShopPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white dark:bg-black border-t border-slate-200 dark:border-white/10 pt-16 pb-8 px-4 mt-auto">
-        <div className="max-w-[1440px] mx-auto flex flex-col gap-12">
-          <div className="flex flex-col md:flex-row justify-between gap-10">
-            <div className="flex flex-col gap-4 max-w-xs">
-              <div className="flex items-center gap-3">
-                <div className="size-8 rounded-full bg-primary flex items-center justify-center text-black">
-                  <span className="material-symbols-outlined">sports_basketball</span>
-                </div>
-                <h2 className="text-lg font-bold">Strive</h2>
-              </div>
-              <p className="text-slate-500 dark:text-gray-500 text-sm leading-relaxed">
-                Crafting the world&apos;s finest basketball equipment for those who refuse to compromise on quality.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-10 md:gap-20">
-              <div className="flex flex-col gap-4">
-                <h3 className="font-bold text-base">Shop</h3>
-                <Link href="#" className="text-slate-500 dark:text-gray-500 text-sm hover:text-primary transition-colors">Basketballs</Link>
-                <Link href="#" className="text-slate-500 dark:text-gray-500 text-sm hover:text-primary transition-colors">Apparel</Link>
-                <Link href="#" className="text-slate-500 dark:text-gray-500 text-sm hover:text-primary transition-colors">Accessories</Link>
-                <Link href="#" className="text-slate-500 dark:text-gray-500 text-sm hover:text-primary transition-colors">Sale</Link>
-              </div>
-              <div className="flex flex-col gap-4">
-                <h3 className="font-bold text-base">Company</h3>
-                <Link href="#" className="text-slate-500 dark:text-gray-500 text-sm hover:text-primary transition-colors">About Us</Link>
-                <Link href="#" className="text-slate-500 dark:text-gray-500 text-sm hover:text-primary transition-colors">Careers</Link>
-                <Link href="#" className="text-slate-500 dark:text-gray-500 text-sm hover:text-primary transition-colors">Sustainability</Link>
-                <Link href="#" className="text-slate-500 dark:text-gray-500 text-sm hover:text-primary transition-colors">Contact</Link>
-              </div>
-              <div className="flex flex-col gap-4">
-                <h3 className="font-bold text-base">Support</h3>
-                <Link href="#" className="text-slate-500 dark:text-gray-500 text-sm hover:text-primary transition-colors">Help Center</Link>
-                <Link href="#" className="text-slate-500 dark:text-gray-500 text-sm hover:text-primary transition-colors">Returns</Link>
-                <Link href="#" className="text-slate-500 dark:text-gray-500 text-sm hover:text-primary transition-colors">Size Guide</Link>
-                <Link href="#" className="text-slate-500 dark:text-gray-500 text-sm hover:text-primary transition-colors">Warranty</Link>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-slate-100 dark:border-white/10 text-sm text-slate-400 dark:text-gray-600">
-            <p>© 2024 Strive. All rights reserved.</p>
-            <div className="flex gap-6">
-              <Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link>
-              <Link href="#" className="hover:text-primary transition-colors">Terms of Service</Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

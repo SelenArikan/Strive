@@ -3,6 +3,7 @@
     {
       "id": 1767089270498,
       "name": "Silent Offical",
+      "mainCategory": "Basketbol Topu",
       "category": "Indoor Series",
       "sizes": [
         3,
@@ -30,6 +31,7 @@
     {
       "id": 1767089311414,
       "name": "Strive for ",
+      "mainCategory": "Basketbol Topu",
       "category": "Outdoor Series",
       "size": 7,
       "courtType": "Outdoor (Street)",
@@ -43,6 +45,7 @@
     {
       "id": 1767089341265,
       "name": "Pop",
+      "mainCategory": "Basketbol Topu",
       "category": "3X3",
       "size": 6,
       "courtType": "3x3 Official",

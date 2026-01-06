@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface Product {
   id: number;
@@ -17,6 +18,7 @@ interface Product {
 }
 
 export default function ProductCarousel() {
+  const { t } = useLanguage();
   const scrollRef = useRef<HTMLDivElement>(null);
   const { addToCart } = useCart();
   const [addedItems, setAddedItems] = useState<number[]>([]);
@@ -68,7 +70,7 @@ export default function ProductCarousel() {
         {/* Header */}
         <div className="flex justify-between items-center mb-12">
           <h2 className="text-3xl md:text-4xl font-body font-bold text-white uppercase tracking-tight">
-            The Lineup
+            STRIVE
           </h2>
           <div className="flex space-x-2">
             <button
@@ -132,11 +134,11 @@ export default function ProductCarousel() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-lg font-bold text-white">
-                    ${product.price.toFixed(2)}
+                    ₺{product.price.toFixed(2)}
                   </span>
-                  {product.originalPrice && (
-                    <span className="text-xs line-through text-gray-500">
-                      ${product.originalPrice.toFixed(2)}
+                  {product.originalPrice && product.originalPrice > product.price && (
+                    <span className="text-sm text-gray-400 line-through ml-2">
+                      ₺{product.originalPrice.toFixed(2)}
                     </span>
                   )}
                 </div>
@@ -147,7 +149,7 @@ export default function ProductCarousel() {
                     : "text-primary hover:text-white"
                     }`}
                 >
-                  {addedItems.includes(product.id) ? "Added!" : "Add to Cart"}
+                  {addedItems.includes(product.id) ? t('common.added') : t('common.addToCart')}
                 </button>
               </div>
             </div>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface Product {
   id: number;
@@ -23,6 +24,7 @@ interface Product {
 }
 
 export default function ShopLandingPage() {
+  const { t, locale, setLocale } = useLanguage();
   const { totalItems } = useCart();
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [selectedSize, setSelectedSize] = useState<number>(7);
@@ -51,19 +53,19 @@ export default function ShopLandingPage() {
               href="/"
               className="border border-white/20 bg-background-dark/80 px-6 py-2 text-sm font-bold uppercase tracking-wider text-white hover:bg-white hover:text-black transition-all backdrop-blur-md"
             >
-              Home
+              {t('nav.home')}
             </Link>
             <Link
               href="/about"
               className="border border-white/20 bg-background-dark/80 px-6 py-2 text-sm font-bold uppercase tracking-wider text-white hover:bg-white hover:text-black transition-all backdrop-blur-md"
             >
-              Hakkımızda
+              {t('nav.about')}
             </Link>
             <Link
               href="/shop/catalog"
               className="border border-white/20 bg-background-dark/80 px-6 py-2 text-sm font-bold uppercase tracking-wider text-white hover:bg-white hover:text-black transition-all backdrop-blur-md"
             >
-              Shop
+              {t('nav.shop')}
             </Link>
           </nav>
           <button onClick={() => setMobileMenuOpen(true)} className="md:hidden border border-white/20 bg-background-dark/80 p-2 text-white">
@@ -80,10 +82,32 @@ export default function ShopLandingPage() {
                 />
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-primary" style={{ writingMode: "vertical-rl" }}>Shop</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-primary" style={{ writingMode: "vertical-rl" }}>{t('nav.shop')}</span>
                 <span className="material-symbols-outlined text-sm mt-1 animate-bounce">arrow_downward</span>
               </div>
             </Link>
+            {/* Language Switcher */}
+            <div className="hidden lg:flex items-center gap-1 border border-white/20 bg-background-dark/80 backdrop-blur-md rounded-lg p-1">
+              <button
+                onClick={() => setLocale('tr')}
+                className={`px-3 py-1.5 rounded text-xs font-bold uppercase transition-all ${locale === 'tr'
+                  ? 'bg-primary text-black'
+                  : 'text-gray-400 hover:text-white'
+                  }`}
+              >
+                TR
+              </button>
+              <button
+                onClick={() => setLocale('en')}
+                className={`px-3 py-1.5 rounded text-xs font-bold uppercase transition-all ${locale === 'en'
+                  ? 'bg-primary text-black'
+                  : 'text-gray-400 hover:text-white'
+                  }`}
+              >
+                EN
+              </button>
+            </div>
+
             <div className="flex items-center bg-black text-white px-6 py-3 gap-6">
               <Link href="/cart" className="relative cursor-pointer group">
                 <span className="material-symbols-outlined group-hover:text-primary transition-colors">shopping_cart</span>
@@ -107,7 +131,7 @@ export default function ShopLandingPage() {
       <div className={`fixed top-0 right-0 h-full w-72 bg-surface-dark z-[70] md:hidden transform transition-transform duration-300 ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between p-6 border-b border-white/10">
-            <span className="text-lg font-bold text-white">Menü</span>
+            <span className="text-lg font-bold text-white">{t('common.menu')}</span>
             <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-400 hover:text-white transition">
               <span className="material-symbols-outlined">close</span>
             </button>
@@ -115,21 +139,46 @@ export default function ShopLandingPage() {
           <div className="flex-1 py-6">
             <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
               <span className="material-symbols-outlined">home</span>
-              <span className="font-medium">Anasayfa</span>
+              <span className="font-medium">{t('nav.home')}</span>
             </Link>
             <Link href="/shop/catalog" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-primary hover:bg-white/5 transition">
               <span className="material-symbols-outlined">storefront</span>
-              <span className="font-medium">Shop</span>
+              <span className="font-medium">{t('nav.shop')}</span>
             </Link>
             <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
               <span className="material-symbols-outlined">info</span>
-              <span className="font-medium">Hakkımızda</span>
+              <span className="font-medium">{t('nav.about')}</span>
             </Link>
             <Link href="/cart" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
               <span className="material-symbols-outlined">shopping_cart</span>
-              <span className="font-medium">Sepet</span>
+              <span className="font-medium">{t('nav.cart')}</span>
               {totalItems > 0 && <span className="ml-auto px-2 py-1 bg-primary text-black text-xs font-bold rounded-full">{totalItems}</span>}
             </Link>
+
+            {/* Language Switcher - Mobile */}
+            <div className="px-6 py-4 border-t border-white/10">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setLocale('tr')}
+                  className={`flex-1 px-4 py-3 rounded-lg text-sm font-bold uppercase transition-all ${locale === 'tr'
+                    ? 'bg-primary text-black'
+                    : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
+                    }`}
+                >
+                  Türkçe
+                </button>
+                <button
+                  onClick={() => setLocale('en')}
+                  className={`flex-1 px-4 py-3 rounded-lg text-sm font-bold uppercase transition-all ${locale === 'en'
+                    ? 'bg-primary text-black'
+                    : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
+                    }`}
+                >
+                  English
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -155,20 +204,20 @@ export default function ShopLandingPage() {
               backgroundImage: "repeating-linear-gradient(90deg, currentColor 0, currentColor 2px, transparent 2px, transparent 4px, currentColor 4px, currentColor 8px, transparent 8px, transparent 10px)"
             }}></div>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.9] tracking-tighter text-white mb-6">
-              YOUR ULTIMATE <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-green-400">GAME STARTS</span> <br />
-              HERE.
+              {t('shop.heroTitle1')} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-green-400">{t('shop.heroTitle2')}</span> <br />
+              {t('shop.heroTitle3')}
             </h1>
             <div className="space-y-2 mb-10 pl-1 border-l-2 border-primary/50">
-              <p className="text-sm text-gray-400 font-mono">*** When the clock winds down</p>
-              <p className="text-sm text-gray-400 font-mono">...there&apos;s no room for</p>
-              <p className="text-sm text-gray-400 font-mono">compromise on grip and precision. ////</p>
+              <p className="text-sm text-gray-400 font-mono">*** {t('shop.heroSubtitle1')}</p>
+              <p className="text-sm text-gray-400 font-mono">...{t('shop.heroSubtitle2')}</p>
+              <p className="text-sm text-gray-400 font-mono">{t('shop.heroSubtitle3')}</p>
             </div>
             <Link
               href="/shop/catalog"
               className="group w-fit flex items-center gap-4 bg-black border border-white/20 rounded-full pl-6 pr-2 py-2 hover:bg-primary hover:border-primary transition-all duration-300"
             >
-              <span className="text-sm font-bold uppercase tracking-wider">Shop Now</span>
+              <span className="text-sm font-bold uppercase tracking-wider">{t('common.shopNow')}</span>
               <span className="flex items-center justify-center size-8 bg-white text-black rounded-full group-hover:scale-110 transition-transform">
                 <span className="material-symbols-outlined text-sm font-bold">arrow_outward</span>
               </span>
@@ -181,7 +230,7 @@ export default function ShopLandingPage() {
             <div className="absolute top-10 left-0 w-20 h-px bg-gray-700 hidden lg:block"></div>
             <div className="absolute top-20 left-10 hidden lg:flex flex-col items-center">
               <div className="w-px h-20 bg-gradient-to-b from-transparent via-gray-500 to-transparent"></div>
-              <p className="text-[10px] text-gray-400 mt-2 font-mono">Official Size &amp; Weight</p>
+              <p className="text-[10px] text-gray-400 mt-2 font-mono">{t('shop.officialSizeWeight')}</p>
             </div>
 
             <div className="relative z-10 w-full max-w-[500px] aspect-square">
@@ -195,7 +244,7 @@ export default function ShopLandingPage() {
               <div className="absolute top-1/4 right-10 flex items-center gap-2 group cursor-pointer">
                 <div className="size-2 bg-green-400 rounded-full animate-ping"></div>
                 <div className="bg-black/80 backdrop-blur border border-white/10 px-3 py-1 rounded text-[10px] uppercase text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                  Enhanced Grip Texture
+                  {t('shop.enhancedGripTexture')}
                 </div>
               </div>
             </div>
@@ -210,7 +259,7 @@ export default function ShopLandingPage() {
           <div className="lg:col-span-3 flex flex-col justify-between py-10 relative z-20">
             <div className="flex flex-col gap-6 items-end">
               <div className="flex flex-col gap-3">
-                <p className="text-[10px] uppercase tracking-widest text-right text-gray-500 italic">Select Size</p>
+                <p className="text-[10px] uppercase tracking-widest text-right text-gray-500 italic">{t('shop.selectSize')}</p>
                 <div className="flex flex-col gap-2">
                   {[5, 6, 7].map((size) => (
                     <button
@@ -239,9 +288,9 @@ export default function ShopLandingPage() {
                   </div>
                 </div>
                 <div className="text-[10px] text-gray-400 font-mono leading-relaxed mb-3">
-                  &gt; Pro-League Specs<br />
-                  &gt; Moisture Management<br />
-                  &gt; Deep Channel Design
+                  &gt; {t('shop.proLeagueSpecs')}<br />
+                  &gt; {t('shop.moistureManagement')}<br />
+                  &gt; {t('shop.deepChannelDesign')}
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex -space-x-2">
@@ -274,12 +323,12 @@ export default function ShopLandingPage() {
         {/* Featured Products Section */}
         <div className="mt-20 border-t border-white/10 pt-10">
           <div className="flex flex-wrap items-center justify-between gap-6 mb-10">
-            <h2 className="text-2xl font-bold uppercase italic">Featured Gear</h2>
+            <h2 className="text-2xl font-bold uppercase italic">{t('shop.featuredProducts')}</h2>
             <div className="flex items-center gap-2 overflow-x-auto">
-              <button className="px-4 py-2 bg-white text-black text-xs font-bold uppercase rounded-full">All</button>
-              <button className="px-4 py-2 border border-white/20 text-gray-400 hover:text-white hover:border-white text-xs font-bold uppercase rounded-full transition-all">Indoor</button>
-              <button className="px-4 py-2 border border-white/20 text-gray-400 hover:text-white hover:border-white text-xs font-bold uppercase rounded-full transition-all">Outdoor</button>
-              <button className="px-4 py-2 border border-white/20 text-gray-400 hover:text-white hover:border-white text-xs font-bold uppercase rounded-full transition-all">Apparel</button>
+              <button className="px-4 py-2 bg-white text-black text-xs font-bold uppercase rounded-full">{t('shop.all')}</button>
+              <button className="px-4 py-2 border border-white/20 text-gray-400 hover:text-white hover:border-white text-xs font-bold uppercase rounded-full transition-all">{t('shop.indoorSeries')}</button>
+              <button className="px-4 py-2 border border-white/20 text-gray-400 hover:text-white hover:border-white text-xs font-bold uppercase rounded-full transition-all">{t('shop.outdoorSeries')}</button>
+              <button className="px-4 py-2 border border-white/20 text-gray-400 hover:text-white hover:border-white text-xs font-bold uppercase rounded-full transition-all">3X3</button>
             </div>
           </div>
 
@@ -310,7 +359,7 @@ export default function ShopLandingPage() {
                 <div className="p-4">
                   <div className="flex justify-between items-start mb-1">
                     <h3 className="text-sm font-bold uppercase text-white">{product.name}</h3>
-                    <span className="text-sm font-bold text-primary">${product.price.toFixed(2)}</span>
+                    <span className="text-primary font-bold">₺{product.price.toFixed(2)}</span>
                   </div>
                   <p className="text-xs text-gray-500">{product.category}</p>
                 </div>
@@ -324,30 +373,12 @@ export default function ShopLandingPage() {
               href="/shop/catalog"
               className="group flex items-center gap-3 border border-white/20 rounded-full px-8 py-3 hover:bg-white hover:text-black transition-all duration-300"
             >
-              <span className="text-sm font-bold uppercase tracking-wider">View All Products</span>
+              <span className="text-sm font-bold uppercase tracking-wider">{t('common.viewAllProducts')}</span>
               <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
             </Link>
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-white/10 bg-background-dark py-10 px-6">
-        <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2">
-            <div className="size-8 bg-primary rounded-full flex items-center justify-center text-black">
-              <span className="material-symbols-outlined text-sm">sports_basketball</span>
-            </div>
-            <h3 className="text-lg font-black italic uppercase">Strive</h3>
-          </div>
-          <div className="flex gap-6 text-sm text-gray-500">
-            <Link href="#" className="hover:text-primary">Privacy</Link>
-            <Link href="#" className="hover:text-primary">Terms</Link>
-            <Link href="#" className="hover:text-primary">Shipping</Link>
-          </div>
-          <p className="text-xs text-gray-600">© 2024 Strive. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 }

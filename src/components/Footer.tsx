@@ -1,37 +1,37 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-
-const footerLinks = {
-  shop: [
-    { name: "Basketballs", href: "#" },
-    { name: "Accessories", href: "#" },
-    { name: "Training Gear", href: "#" },
-    { name: "Apparel", href: "#" },
-  ],
-  company: [
-    { name: "About Us", href: "/about" },
-    { name: "Careers", href: "#" },
-    { name: "Blog", href: "#" },
-    { name: "Contact", href: "#" },
-  ],
-};
+import { useState, useEffect } from "react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
+  const { t } = useLanguage();
+  const [categories, setCategories] = useState<string[]>([]);
 
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle subscription logic here
-    console.log("Subscribed:", email);
-    setEmail("");
-  };
+  useEffect(() => {
+    // Fetch products and extract unique main categories
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.products && Array.isArray(data.products)) {
+          const uniqueMainCategories = Array.from(
+            new Set(data.products.map((product: any) => product.mainCategory).filter(Boolean))
+          ) as string[];
+          setCategories(uniqueMainCategories);
+        }
+      })
+      .catch((err) => console.error("Error fetching categories:", err));
+  }, []);
+
+  const companyLinks = [
+    { name: t("footer.about"), href: "/about" },
+    { name: t("footer.contact"), href: "https://wa.me/905XXXXXXXXX?text=Merhaba, ürünleriniz hakkında bilgi almak istiyorum", isExternal: true },
+  ];
 
   return (
     <footer className="bg-black text-white pt-20 pb-10 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
           {/* Brand Column */}
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center gap-2 mb-6">
@@ -41,7 +41,7 @@ export default function Footer() {
               <span className="font-body font-bold text-xl tracking-wide">Strive</span>
             </div>
             <p className="text-gray-500 text-sm leading-relaxed mb-6">
-              Professional grade equipment for the modern athlete. Designed for durability, performance, and style.
+              {t("footer.brandDescription")}
             </p>
             <div className="flex space-x-4">
               <a
@@ -59,68 +59,62 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Shop Links */}
+          {/* Shop Links - Dynamic Categories */}
           <div>
-            <h4 className="font-bold text-white mb-6">Shop</h4>
+            <h4 className="font-bold text-white mb-6">{t("footer.shop")}</h4>
             <ul className="space-y-3 text-sm text-gray-500">
-              {footerLinks.shop.map((link) => (
-                <li key={link.name}>
-                  <Link href={link.href} className="hover:text-primary transition">
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <li key={category}>
+                    <Link
+                      href={`/shop/catalog?mainCategory=${encodeURIComponent(category)}`}
+                      className="hover:text-primary transition"
+                    >
+                      {category}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li className="text-gray-600">{t("footer.loadingCategories")}</li>
+              )}
             </ul>
           </div>
 
           {/* Company Links */}
           <div>
-            <h4 className="font-bold text-white mb-6">Company</h4>
+            <h4 className="font-bold text-white mb-6">{t("footer.company")}</h4>
             <ul className="space-y-3 text-sm text-gray-500">
-              {footerLinks.company.map((link) => (
+              {companyLinks.map((link: any) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="hover:text-primary transition">
-                    {link.name}
-                  </Link>
+                  {link.isExternal ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-primary transition"
+                    >
+                      {link.name}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className="hover:text-primary transition">
+                      {link.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h4 className="font-bold text-white mb-6">Stay Updated</h4>
-            <p className="text-gray-500 text-sm mb-4">
-              Subscribe for the latest drops and exclusive offers.
-            </p>
-            <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded bg-surface-dark border border-white/10 focus:outline-none focus:border-primary text-white text-sm"
-                placeholder="Enter your email"
-                required
-              />
-              <button
-                type="submit"
-                className="w-full px-4 py-3 bg-white text-black font-bold uppercase text-xs tracking-wider rounded hover:bg-primary transition"
-              >
-                Subscribe
-              </button>
-            </form>
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-600 text-sm">© 2024 Strive. All rights reserved.</p>
+          <p className="text-gray-600 text-sm">© 2024 Strive. {t("footer.allRightsReserved")}.</p>
           <div className="flex space-x-6 text-sm text-gray-600">
-            <Link href="#" className="hover:text-white transition">
-              Privacy Policy
+            <Link href="/privacy-policy" className="hover:text-white transition">
+              {t("footer.privacyPolicy")}
             </Link>
-            <Link href="#" className="hover:text-white transition">
-              Terms of Service
+            <Link href="/terms-of-service" className="hover:text-white transition">
+              {t("footer.termsOfService")}
             </Link>
           </div>
         </div>

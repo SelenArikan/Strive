@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function HeroSection() {
+    const { t } = useLanguage();
     return (
         <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-background-dark min-h-screen">
             {/* Video Background */}
@@ -29,18 +31,18 @@ export default function HeroSection() {
                     {/* Badge */}
                     <div className="inline-flex items-center px-4 py-1.5 mb-8 bg-surface-dark border border-primary/30 rounded-full">
                         <span className="w-2 h-2 rounded-full bg-primary mr-2 animate-pulse"></span>
-                        <span className="text-primary font-bold tracking-wide text-xs uppercase">New Season Drop</span>
+                        <span className="text-primary font-bold tracking-wide text-xs uppercase">{t('home.hero.badge')}</span>
                     </div>
 
                     {/* Headline */}
                     <h1 className="text-6xl lg:text-8xl font-body font-black text-white leading-[0.95] tracking-tight mb-6">
-                        Strive for <br />
-                        <span className="text-primary">Success</span>
+                        {t('home.hero.title1')} <br />
+                        <span className="text-primary">{t('home.hero.title2')}</span>
                     </h1>
 
                     {/* Description */}
                     <p className="text-lg text-gray-400 mb-10 max-w-lg font-light leading-relaxed">
-                        Elevate your game with our premium pro-series basketballs. Precision engineered for the dedicated athlete.
+                        {t('home.hero.description')}
                     </p>
 
                     {/* Button - Only Shop Collection */}
@@ -49,7 +51,7 @@ export default function HeroSection() {
                             href="/shop/catalog"
                             className="px-8 py-4 bg-primary hover:bg-primary-light text-black font-bold text-lg rounded-full transition transform hover:-translate-y-1 shadow-[0_0_20px_rgba(232,106,51,0.3)] text-center"
                         >
-                            Shop Collection
+                            {t('home.hero.cta')}
                         </Link>
                     </div>
 
@@ -62,7 +64,7 @@ export default function HeroSection() {
                         </div>
                         <div>
                             <p className="text-white font-bold text-sm">1000+ Ballers</p>
-                            <p className="text-primary text-xs">Trust our gear</p>
+                            <p className="text-primary text-xs">{t('home.hero.trustedBy')}</p>
                         </div>
                     </div>
                 </div>

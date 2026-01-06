@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import ProductCarousel from "@/components/ProductCarousel";
-import BannerSection from "@/components/BannerSection";
+
 import Footer from "@/components/Footer";
 import IntroAnimation from "@/components/IntroAnimation";
 
@@ -31,7 +31,7 @@ export default function Home() {
           <HeroSection />
           <FeaturesSection />
           <ProductCarousel />
-          <BannerSection />
+
         </main>
         <Footer />
       </div>

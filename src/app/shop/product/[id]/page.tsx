@@ -5,6 +5,9 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import Footer from "@/components/Footer";
+
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface MediaItem {
     type: "image" | "video";
@@ -32,6 +35,7 @@ export default function ProductDetailPage() {
     const params = useParams();
     const productId = params.id;
     const { addToCart, totalItems } = useCart();
+    const { t, locale, setLocale } = useLanguage();
 
     const [product, setProduct] = useState<Product | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -96,7 +100,7 @@ export default function ProductDetailPage() {
             console.error("Analytics error:", e);
         }
 
-        const message = `Merhaba! Bu ürünü satın almak istiyorum:\n\n*${product.name}*\nAdet: ${quantity}\nFiyat: $${(product.price * quantity).toFixed(2)}\n\nÜrün linki: ${window.location.href}`;
+        const message = `Merhaba! Bu ürünü satın almak istiyorum:\n\n*${product.name}*\nAdet: ${quantity}\nFiyat: ₺${(product.price * quantity).toFixed(2)}\n\nÜrün linki: ${window.location.href}`;
         const whatsappUrl = `https://wa.me/905551234567?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, "_blank");
     };
@@ -134,7 +138,7 @@ export default function ProductDetailPage() {
             <div className="min-h-screen bg-background-dark flex items-center justify-center">
                 <div className="text-center">
                     <span className="material-symbols-outlined text-primary text-5xl animate-spin">progress_activity</span>
-                    <p className="text-gray-400 mt-4">Yükleniyor...</p>
+                    <p className="text-gray-400 mt-4">{t('product.loading')}</p>
                 </div>
             </div>
         );
@@ -144,10 +148,10 @@ export default function ProductDetailPage() {
         return (
             <div className="min-h-screen bg-background-dark flex flex-col items-center justify-center">
                 <span className="material-symbols-outlined text-gray-600 text-6xl mb-4">error</span>
-                <h1 className="text-2xl font-bold text-white mb-2">Ürün Bulunamadı</h1>
-                <p className="text-gray-400 mb-6">Aradığınız ürün mevcut değil.</p>
+                <h1 className="text-2xl font-bold text-white mb-2">{t('product.notFound')}</h1>
+                <p className="text-gray-400 mb-6">{t('product.notFoundDesc')}</p>
                 <Link href="/shop/catalog" className="px-6 py-3 bg-primary text-black font-bold rounded-xl">
-                    Mağazaya Dön
+                    {t('product.backToShop')}
                 </Link>
             </div>
         );
@@ -168,9 +172,24 @@ export default function ProductDetailPage() {
                         <h2 className="text-xl font-bold tracking-tight">Strive</h2>
                     </Link>
                     <nav className="hidden md:flex items-center gap-8">
-                        <Link href="/" className="text-gray-300 text-sm font-medium uppercase tracking-wide transition hover:text-primary">Anasayfa</Link>
-                        <Link href="/shop/catalog" className="text-primary text-sm font-bold uppercase tracking-wide transition hover:text-white">Shop</Link>
-                        <Link href="/about" className="text-gray-300 text-sm font-medium uppercase tracking-wide transition hover:text-white">Hakkımızda</Link>
+                        <Link href="/" className="text-gray-300 text-sm font-medium uppercase tracking-wide transition hover:text-primary">{t('nav.home')}</Link>
+                        <Link href="/shop/catalog" className="text-primary text-sm font-bold uppercase tracking-wide transition hover:text-white">{t('nav.shop')}</Link>
+                        <Link href="/about" className="text-gray-300 text-sm font-medium uppercase tracking-wide transition hover:text-white">{t('nav.about')}</Link>
+                        <div className="flex items-center gap-2 border-l border-white/10 pl-6 ml-2">
+                            <button
+                                onClick={() => setLocale('tr')}
+                                className={`text-xs font-bold transition-colors ${locale === 'tr' ? 'text-primary' : 'text-gray-500 hover:text-white'}`}
+                            >
+                                TR
+                            </button>
+                            <span className="text-gray-700">|</span>
+                            <button
+                                onClick={() => setLocale('en')}
+                                className={`text-xs font-bold transition-colors ${locale === 'en' ? 'text-primary' : 'text-gray-500 hover:text-white'}`}
+                            >
+                                EN
+                            </button>
+                        </div>
                     </nav>
                 </div>
                 <div className="flex items-center gap-3">
@@ -200,27 +219,43 @@ export default function ProductDetailPage() {
             <div className={`fixed top-0 right-0 h-full w-72 bg-surface-dark z-[70] md:hidden transform transition-transform duration-300 ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
                 <div className="flex flex-col h-full">
                     <div className="flex items-center justify-between p-6 border-b border-white/10">
-                        <span className="text-lg font-bold text-white">Menü</span>
-                        <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-400 hover:text-white transition">
-                            <span className="material-symbols-outlined">close</span>
-                        </button>
+                        <span className="text-lg font-bold text-white">{t('header.menu')}</span>
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2 bg-white/5 rounded-lg p-1">
+                                <button
+                                    onClick={() => setLocale('tr')}
+                                    className={`px-3 py-1 text-xs font-bold rounded-md transition-colors ${locale === 'tr' ? 'bg-primary text-black' : 'text-gray-400'}`}
+                                >
+                                    TR
+                                </button>
+                                <button
+                                    onClick={() => setLocale('en')}
+                                    className={`px-3 py-1 text-xs font-bold rounded-md transition-colors ${locale === 'en' ? 'bg-primary text-black' : 'text-gray-400'}`}
+                                >
+                                    EN
+                                </button>
+                            </div>
+                            <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-400 hover:text-white transition">
+                                <span className="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
                     </div>
                     <div className="flex-1 py-6">
                         <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
                             <span className="material-symbols-outlined">home</span>
-                            <span className="font-medium">Anasayfa</span>
+                            <span className="font-medium">{t('nav.home')}</span>
                         </Link>
                         <Link href="/shop/catalog" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-primary hover:bg-white/5 transition">
                             <span className="material-symbols-outlined">storefront</span>
-                            <span className="font-medium">Shop</span>
+                            <span className="font-medium">{t('nav.shop')}</span>
                         </Link>
                         <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
                             <span className="material-symbols-outlined">info</span>
-                            <span className="font-medium">Hakkımızda</span>
+                            <span className="font-medium">{t('nav.about')}</span>
                         </Link>
                         <Link href="/cart" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
                             <span className="material-symbols-outlined">shopping_cart</span>
-                            <span className="font-medium">Sepet</span>
+                            <span className="font-medium">{t('nav.cart')}</span>
                             {totalItems > 0 && <span className="ml-auto px-2 py-1 bg-primary text-black text-xs font-bold rounded-full">{totalItems}</span>}
                         </Link>
                     </div>
@@ -232,9 +267,9 @@ export default function ProductDetailPage() {
                 <div className="mx-auto max-w-7xl px-4 py-6 md:px-8 lg:px-12">
                     {/* Breadcrumbs */}
                     <nav className="flex flex-wrap items-center gap-2 pb-6 text-sm">
-                        <Link href="/" className="text-gray-400 hover:text-primary transition">Home</Link>
+                        <Link href="/" className="text-gray-400 hover:text-primary transition">{t('nav.home')}</Link>
                         <span className="text-gray-600">/</span>
-                        <Link href="/shop/catalog" className="text-gray-400 hover:text-primary transition">Shop</Link>
+                        <Link href="/shop/catalog" className="text-gray-400 hover:text-primary transition">{t('nav.shop')}</Link>
                         <span className="text-gray-600">/</span>
                         <span className="font-medium text-primary">{product.name}</span>
                     </nav>
@@ -326,10 +361,10 @@ export default function ProductDetailPage() {
                             {/* Price & Actions */}
                             <div className="space-y-6 py-2">
                                 <div className="flex items-end gap-4">
-                                    <p className="text-4xl font-bold text-primary">${product.price.toFixed(2)}</p>
+                                    <p className="text-4xl font-bold text-primary">₺{product.price.toFixed(2)}</p>
                                     {product.originalPrice && product.originalPrice > product.price && (
                                         <>
-                                            <p className="mb-1 text-lg text-gray-500 line-through">${product.originalPrice.toFixed(2)}</p>
+                                            <p className="mb-1 text-lg text-gray-500 line-through">₺{product.originalPrice.toFixed(2)}</p>
                                             <span className="mb-2 rounded bg-red-500/20 px-2 py-0.5 text-xs font-bold text-red-500">-{discount}%</span>
                                         </>
                                     )}
@@ -338,23 +373,23 @@ export default function ProductDetailPage() {
                                 {/* Specs Grid Mini */}
                                 <div className="grid grid-cols-2 gap-4 rounded-xl bg-surface-dark p-4 border border-white/10">
                                     <div className="flex flex-col">
-                                        <span className="text-xs uppercase text-gray-500">Available Sizes</span>
+                                        <span className="text-xs uppercase text-gray-500">{t('product.availableSizes')}</span>
                                         <span className="font-bold text-white">
                                             {product.sizes?.map(s => `Size ${s}`).join(", ") || "Size 7"}
                                         </span>
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-xs uppercase text-gray-500">Court Type</span>
+                                        <span className="text-xs uppercase text-gray-500">{t('product.courtType')}</span>
                                         <span className="font-bold text-white">{product.courtType}</span>
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-xs uppercase text-gray-500">Category</span>
+                                        <span className="text-xs uppercase text-gray-500">{t('product.category')}</span>
                                         <span className="font-bold text-white">{product.category}</span>
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-xs uppercase text-gray-500">Status</span>
+                                        <span className="text-xs uppercase text-gray-500">{t('product.status')}</span>
                                         <span className={`font-bold ${product.inStock ? "text-green-400" : "text-red-400"}`}>
-                                            {product.inStock ? "Stokta" : "Tükendi"}
+                                            {product.inStock ? t('admin.inStock') : t('admin.outOfStock')}
                                         </span>
                                     </div>
                                 </div>
@@ -362,7 +397,7 @@ export default function ProductDetailPage() {
                                 {/* Size Selector */}
                                 {product.sizes && product.sizes.length > 0 && (
                                     <div>
-                                        <label className="mb-2 block text-xs font-medium uppercase text-gray-500">Beden Seçin</label>
+                                        <label className="mb-2 block text-xs font-medium uppercase text-gray-500">{t('product.selectSize')}</label>
                                         <div className="flex flex-wrap gap-2">
                                             {product.sizes.map((size) => (
                                                 <button
@@ -383,7 +418,7 @@ export default function ProductDetailPage() {
                                 {/* Quantity Selector */}
                                 <div className="flex gap-4">
                                     <div className="w-32">
-                                        <label className="mb-1 block text-xs font-medium uppercase text-gray-500">Adet</label>
+                                        <label className="mb-1 block text-xs font-medium uppercase text-gray-500">{t('product.quantity')}</label>
                                         <div className="flex items-center rounded-lg bg-surface-dark p-1 border border-white/10">
                                             <button
                                                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -422,7 +457,7 @@ export default function ProductDetailPage() {
                                         {addedToCart ? "check" : "add_shopping_cart"}
                                     </span>
                                     <span className="text-lg uppercase tracking-wide">
-                                        {addedToCart ? "Sepete Eklendi!" : "Sepete Ekle"}
+                                        {addedToCart ? t('common.added') : t('common.addToCart')}
                                     </span>
                                 </button>
 
@@ -435,10 +470,10 @@ export default function ProductDetailPage() {
                                     <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
                                     </svg>
-                                    <span className="text-lg font-bold uppercase tracking-wide">WhatsApp ile Satın Al</span>
+                                    <span className="text-lg font-bold uppercase tracking-wide">{t('product.buyWithWhatsApp')}</span>
                                 </button>
 
-                                <p className="text-center text-xs text-gray-500">Ücretsiz kargo - 14 gün iade garantisi</p>
+                                <p className="text-center text-xs text-gray-500">{t('product.freeShipping')}</p>
                             </div>
 
                             {/* Accordion Items */}
@@ -446,7 +481,7 @@ export default function ProductDetailPage() {
                                 {/* Product Details */}
                                 <details className="group py-4" open>
                                     <summary className="flex cursor-pointer items-center justify-between font-bold text-white marker:content-none hover:text-primary">
-                                        <span>Ürün Detayları</span>
+                                        <span>{t('product.productDetails')}</span>
                                         <span className="material-symbols-outlined transition group-open:rotate-180">expand_more</span>
                                     </summary>
                                     <div className="pt-3 text-sm leading-relaxed text-gray-400">
@@ -457,7 +492,7 @@ export default function ProductDetailPage() {
                                                 ))}
                                             </ul>
                                         ) : (
-                                            <p>{product.description || "Ürün detayları mevcut değil."}</p>
+                                            <p>{product.description || t('product.noDetails')}</p>
                                         )}
                                     </div>
                                 </details>
@@ -465,11 +500,11 @@ export default function ProductDetailPage() {
                                 {/* Shipping & Returns */}
                                 <details className="group py-4">
                                     <summary className="flex cursor-pointer items-center justify-between font-bold text-white marker:content-none hover:text-primary">
-                                        <span>Kargo & İade</span>
+                                        <span>{t('product.shippingReturns')}</span>
                                         <span className="material-symbols-outlined transition group-open:rotate-180">expand_more</span>
                                     </summary>
                                     <div className="pt-3 text-sm leading-relaxed text-gray-400">
-                                        Hızlı kargo ile gönderim yapılmaktadır. Ürün kullanılmamış ve orijinal ambalajında olması kaydıyla 14 gün içinde iade kabul edilmektedir.
+                                        {t('product.shippingText')}
                                     </div>
                                 </details>
                             </div>
@@ -478,7 +513,7 @@ export default function ProductDetailPage() {
 
                     {/* Reviews Section */}
                     <div className="mt-24 border-t border-white/10 pt-12">
-                        <h3 className="mb-8 text-2xl font-black uppercase text-white">Müşteri Yorumları</h3>
+                        <h3 className="mb-8 text-2xl font-black uppercase text-white">{t('product.customerReviews')}</h3>
                         <div className="flex flex-col gap-8 lg:flex-row lg:gap-16">
                             {/* Summary */}
                             <div className="w-full lg:w-1/3">
@@ -493,7 +528,7 @@ export default function ProductDetailPage() {
                                             ))}
                                         </div>
                                     </div>
-                                    <p className="text-gray-400 mb-6">215 değerlendirmeye göre</p>
+                                    <p className="text-gray-400 mb-6">{t('product.basedOnReviews')}</p>
                                     <div className="space-y-3">
                                         {[
                                             { stars: 5, percent: 78 },
@@ -519,8 +554,8 @@ export default function ProductDetailPage() {
                                 {/* Review 1 */}
                                 <div className="border-b border-white/10 pb-6">
                                     <div className="flex items-center justify-between mb-2">
-                                        <h4 className="font-bold text-white">Muhteşem kalite!</h4>
-                                        <span className="text-sm text-gray-500">2 gün önce</span>
+                                        <h4 className="font-bold text-white">{t('product.reviews.r1t')}</h4>
+                                        <span className="text-sm text-gray-500">{t('product.reviews.time2d')}</span>
                                     </div>
                                     <div className="flex text-primary mb-3 text-sm">
                                         {[...Array(5)].map((_, i) => (
@@ -528,14 +563,14 @@ export default function ProductDetailPage() {
                                         ))}
                                     </div>
                                     <p className="text-gray-400 leading-relaxed">
-                                        Grip mükemmel, saha tozlu olduğunda bile kayma yok. Street basket oynayan herkese tavsiye ederim.
+                                        {t('product.reviews.r1d')}
                                     </p>
                                     <div className="mt-4 flex items-center gap-2">
                                         <div className="h-6 w-6 rounded-full bg-gray-600 flex items-center justify-center text-xs font-bold text-white">M</div>
                                         <span className="text-sm font-medium text-gray-300">Mehmet K.</span>
                                         <span className="ml-2 flex items-center gap-1 text-xs text-primary">
                                             <span className="material-symbols-outlined text-[14px]">check_circle</span>
-                                            Doğrulanmış Alıcı
+                                            {t('product.verifiedBuyer')}
                                         </span>
                                     </div>
                                 </div>
@@ -543,8 +578,8 @@ export default function ProductDetailPage() {
                                 {/* Review 2 */}
                                 <div className="border-b border-white/10 pb-6">
                                     <div className="flex items-center justify-between mb-2">
-                                        <h4 className="font-bold text-white">Fiyat/performans harika</h4>
-                                        <span className="text-sm text-gray-500">1 hafta önce</span>
+                                        <h4 className="font-bold text-white">{t('product.reviews.r2t')}</h4>
+                                        <span className="text-sm text-gray-500">{t('product.reviews.time1w')}</span>
                                     </div>
                                     <div className="flex text-primary mb-3 text-sm">
                                         {[...Array(4)].map((_, i) => (
@@ -553,14 +588,14 @@ export default function ProductDetailPage() {
                                         <span className="material-symbols-outlined text-[16px]">star_border</span>
                                     </div>
                                     <p className="text-gray-400 leading-relaxed">
-                                        Bu fiyata gerçekten iyi kalite. Kanallar derin, şut çekerken kontrol sağlıyor.
+                                        {t('product.reviews.r2d')}
                                     </p>
                                     <div className="mt-4 flex items-center gap-2">
                                         <div className="h-6 w-6 rounded-full bg-gray-700 flex items-center justify-center text-xs font-bold text-white">A</div>
                                         <span className="text-sm font-medium text-gray-300">Ali V.</span>
                                         <span className="ml-2 flex items-center gap-1 text-xs text-primary">
                                             <span className="material-symbols-outlined text-[14px]">check_circle</span>
-                                            Doğrulanmış Alıcı
+                                            {t('product.verifiedBuyer')}
                                         </span>
                                     </div>
                                 </div>
@@ -568,8 +603,8 @@ export default function ProductDetailPage() {
                                 {/* Review 3 */}
                                 <div className="pb-6">
                                     <div className="flex items-center justify-between mb-2">
-                                        <h4 className="font-bold text-white">Beklediğimden iyi</h4>
-                                        <span className="text-sm text-gray-500">2 hafta önce</span>
+                                        <h4 className="font-bold text-white">{t('product.reviews.r3t')}</h4>
+                                        <span className="text-sm text-gray-500">{t('product.reviews.time2w')}</span>
                                     </div>
                                     <div className="flex text-primary mb-3 text-sm">
                                         {[...Array(5)].map((_, i) => (
@@ -577,7 +612,7 @@ export default function ProductDetailPage() {
                                         ))}
                                     </div>
                                     <p className="text-gray-400 leading-relaxed">
-                                        Hızlı kargo, güzel paketleme. Top çok kaliteli, hem indoor hem outdoor kullanıyorum. Teşekkürler!
+                                        {t('product.reviews.r3d')}
                                     </p>
                                     <div className="mt-4 flex items-center gap-2">
                                         <div className="h-6 w-6 rounded-full bg-primary/30 flex items-center justify-center text-xs font-bold text-primary">E</div>
@@ -595,20 +630,7 @@ export default function ProductDetailPage() {
             </main>
 
             {/* Footer */}
-            <footer className="mt-20 border-t border-white/10 bg-surface-dark py-12 text-sm text-gray-400">
-                <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 md:flex-row lg:px-12">
-                    <div className="flex flex-col gap-2 md:items-start">
-                        <h2 className="text-xl font-bold text-white">Strive</h2>
-                        <p>© 2024 Strive. Tüm hakları saklıdır.</p>
-                    </div>
-                    <div className="flex flex-wrap justify-center gap-8">
-                        <Link href="#" className="hover:text-primary transition">Gizlilik Politikası</Link>
-                        <Link href="#" className="hover:text-primary transition">Kullanım Şartları</Link>
-                        <Link href="#" className="hover:text-primary transition">Kargo Bilgisi</Link>
-                        <Link href="/about" className="hover:text-primary transition">İletişim</Link>
-                    </div>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 }
