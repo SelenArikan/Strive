@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useSearchParams } from "next/navigation";
@@ -56,7 +56,7 @@ const getDiscountPercent = (product: Product) => {
   return 0;
 };
 
-export default function ShopPage() {
+function CatalogContent() {
   const { t, locale, setLocale } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -639,5 +639,20 @@ export default function ShopPage() {
       {/* Footer */}
       <Footer />
     </div>
+  );
+}
+
+export default function ShopPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 dark:bg-background-dark">
+        <div className="flex flex-col items-center gap-4">
+          <div className="size-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+          <p className="text-slate-500 dark:text-gray-400 font-medium">Loading catalog...</p>
+        </div>
+      </div>
+    }>
+      <CatalogContent />
+    </Suspense>
   );
 }
