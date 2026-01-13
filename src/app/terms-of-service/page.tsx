@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Footer from "@/components/Footer";
 
 export default function TermsOfService() {
@@ -7,11 +8,14 @@ export default function TermsOfService() {
             {/* Header */}
             <header className="border-b border-white/10 bg-black/50 backdrop-blur-sm sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-black">
-                            <span className="material-symbols-outlined text-sm">sports_basketball</span>
-                        </div>
-                        <span className="font-body font-bold text-xl tracking-wide">Strive</span>
+                    <Link href="/" className="flex items-center">
+                        <Image
+                            src="/Logos/logo(beyaz).png"
+                            alt="Strive"
+                            width={120}
+                            height={42}
+                            className="h-10 w-auto"
+                        />
                     </Link>
                     <Link
                         href="/"

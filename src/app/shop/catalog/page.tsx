@@ -215,13 +215,14 @@ function CatalogContent() {
       <header className="fixed top-0 z-50 w-full backdrop-blur-md bg-slate-50/90 dark:bg-background-dark/90 border-b border-slate-200 dark:border-white/5">
         <div className="px-4 md:px-10 py-3 flex items-center justify-between mx-auto max-w-[1440px]">
           <div className="flex items-center gap-4 md:gap-8">
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="size-8 rounded-full bg-primary flex items-center justify-center text-black">
-                <span className="material-symbols-outlined">sports_basketball</span>
-              </div>
-              <h2 className="text-lg font-bold leading-tight tracking-tight group-hover:text-primary transition-colors">
-                Strive
-              </h2>
+            <Link href="/" className="flex items-center group">
+              <Image
+                src="/Logos/logo(beyaz).png"
+                alt="Strive"
+                width={120}
+                height={42}
+                className="h-10 w-auto"
+              />
             </Link>
             <nav className="hidden md:flex items-center gap-8">
               <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
@@ -500,21 +501,17 @@ function CatalogContent() {
                   </div>
                 </div>
 
-                {/* Promo Banner */}
-                <div className="rounded-2xl overflow-hidden relative aspect-[4/5] w-full mt-4 group cursor-pointer">
-                  <Image
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEvVibDPRU8I7qPDZzmUiYOPYINxaNTGA5D24X1Q0PAAgsTZ_GFpSWz65S-nHCE9MkrEYyWY-L6O3WnbS5z4uiCPFsr0HmUDog646I87RzjjFiuRGJstJKouH0p5pkzC_mYqd1g-2Q495zh3BdVJbqTAMk8noOdx1MOGot5rnglFUSi249rSj-WnwAsKA4Ls4IlqbvnTz-cdKRdV5iUXre8vgcMBkRSXRbNK6Ar8P6GASSufD6jCCBH6N7aJohDllUnReH2ywasUg"
-                    alt="Midnight Series Promo"
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 p-6">
-                    <span className="text-primary font-bold text-xs uppercase tracking-wider mb-2 block">{t('catalog.newSeason')}</span>
-                    <h4 className="text-white text-2xl font-black leading-none mb-2">{t('catalog.nightSeries')}</h4>
-                    <p className="text-slate-300 text-sm mb-4">{t('catalog.limitedEdition')}</p>
-                    <span className="text-white text-sm font-bold underline underline-offset-4 decoration-primary decoration-2">{t('common.shopNow')}</span>
-                  </div>
+                {/* Promo Video */}
+                <div className="rounded-2xl overflow-hidden relative aspect-[4/5] w-full mt-4">
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
+                  >
+                    <source src="/videos/Tanıtım_Reels2.mp4" type="video/mp4" />
+                  </video>
                 </div>
               </div>
             </aside>

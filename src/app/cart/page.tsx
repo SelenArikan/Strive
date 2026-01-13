@@ -198,7 +198,7 @@ export default function CartPage() {
                       }
 
                       // 2. Prepare WhatsApp Message
-                      const phoneNumber = "905555555555"; // BURAYI KENDİ NUMARANIZLA DEĞİŞTİRİN
+                      const phoneNumber = "905547970558"; // BURAYI KENDİ NUMARANIZLA DEĞİŞTİRİN
 
                       let message = `*Yeni Sipariş!* 🏀\n\n`;
                       items.forEach((item, index) => {

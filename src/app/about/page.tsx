@@ -18,12 +18,15 @@ export default function AboutPage() {
             <nav className="fixed w-full z-50 bg-background-dark/90 backdrop-blur-md border-b border-white/5">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-24">
-                        <div className="flex-shrink-0 flex items-center gap-2">
-                            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-black">
-                                <span className="material-symbols-outlined">sports_basketball</span>
-                            </div>
-                            <span className="font-body font-extrabold text-2xl tracking-tight text-white">Strive</span>
-                        </div>
+                        <Link href="/" className="flex-shrink-0">
+                            <Image
+                                src="/Logos/logo(beyaz).png"
+                                alt="Strive"
+                                width={120}
+                                height={42}
+                                className="h-10 w-auto"
+                            />
+                        </Link>
                         <div className="hidden md:flex space-x-12 items-center">
                             <Link href="/" className="text-base font-medium text-gray-300 hover:text-primary transition">{t('nav.home')}</Link>
                             <Link href="/about" className="text-base font-medium text-white hover:text-primary transition">{t('nav.about')}</Link>
@@ -277,13 +280,25 @@ export default function AboutPage() {
                                     {t('about.journeyText4')}
                                 </p>
                             </div>
-                            <div className="mt-10">
-                                <Image
-                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBviU5TTe92gfFMeyfTNxkysQQWdkqD2NIwp5--Si9C9MAopiRlv1dLRMNlX_thz6y7NDn5Ila2yK234aeNGphb5eqFQyFC8YWa5Hal3Eavx-KRlo5FyvzxYX_q5HKqLTbOnuyqyPHkzjQ4j70Uym-Gzs8wBzWHhGL7SLPwuNFOdzPV2vWocAGwlyWomncOmvc0c9Kz2IpFdOKHLJAF7-Edm55MB-AxKSBOQZ7W4lZ5qojN6h3x_x5Q54vHggNppaz8rFS4luJv2-A"
-                                    alt="Founder Signature"
-                                    width={200}
-                                    height={64}
-                                    className="h-16 w-auto opacity-70 filter invert"
+                            {/* Certification Cards */}
+                            <div className="mt-10 flex gap-4">
+                                <a
+                                    href="/Certification/TCT251117C004001-Etiket-STRIVE Silent Basketball-REACH 附录 17 PAHs 8 英文(1).pdf"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-16 h-16 bg-white rounded-lg hover:opacity-80 transition"
+                                />
+                                <a
+                                    href="/Certification/TCT251117C004002-Etiket-STRIVE Silent Basketball-Size 7，Size 5-EN 71-1-2-3 (2024) 英文.pdf"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-16 h-16 bg-white rounded-lg hover:opacity-80 transition"
+                                />
+                                <a
+                                    href="/Certification/TCT251117C004003-Etiket-STRIVE Silent Basketball-REACH 附录17 邻苯 英文(1).pdf"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-16 h-16 bg-white rounded-lg hover:opacity-80 transition"
                                 />
                             </div>
                         </div>

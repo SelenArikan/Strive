@@ -101,7 +101,7 @@ export default function ProductDetailPage() {
         }
 
         const message = `Merhaba! Bu ürünü satın almak istiyorum:\n\n*${product.name}*\nAdet: ${quantity}\nFiyat: ₺${(product.price * quantity).toFixed(2)}\n\nÜrün linki: ${window.location.href}`;
-        const whatsappUrl = `https://wa.me/905551234567?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/905547970558?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, "_blank");
     };
 
@@ -165,11 +165,14 @@ export default function ProductDetailPage() {
             {/* Header */}
             <header className="sticky top-0 z-50 flex items-center justify-between border-b border-white/10 bg-surface-dark/95 backdrop-blur-md px-4 py-4 md:px-6 lg:px-12">
                 <div className="flex items-center gap-4 md:gap-8">
-                    <Link href="/" className="flex items-center gap-3 text-white">
-                        <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-black">
-                            <span className="material-symbols-outlined text-sm">sports_basketball</span>
-                        </div>
-                        <h2 className="text-xl font-bold tracking-tight">Strive</h2>
+                    <Link href="/" className="flex items-center">
+                        <Image
+                            src="/Logos/logo(beyaz).png"
+                            alt="Strive"
+                            width={120}
+                            height={42}
+                            className="h-10 w-auto"
+                        />
                     </Link>
                     <nav className="hidden md:flex items-center gap-8">
                         <Link href="/" className="text-gray-300 text-sm font-medium uppercase tracking-wide transition hover:text-primary">{t('nav.home')}</Link>

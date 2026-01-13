@@ -69,9 +69,13 @@ export default function ProductCarousel() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-body font-bold text-white uppercase tracking-tight">
-            STRIVE
-          </h2>
+          <Image
+            src="/Logos/logo(beyaz).png"
+            alt="Strive"
+            width={160}
+            height={56}
+            className="h-12 w-auto"
+          />
           <div className="flex space-x-2">
             <button
               onClick={() => scroll("left")}

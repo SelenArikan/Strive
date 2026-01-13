@@ -1,9 +1,14 @@
 {
-  "purchaseClicks": 1,
+  "purchaseClicks": 2,
   "productViews": {},
   "dailyStats": [
     {
       "date": "2025-12-30",
+      "purchases": 1,
+      "views": 0
+    },
+    {
+      "date": "2026-01-13",
       "purchases": 1,
       "views": 0
     }

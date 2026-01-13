@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/hooks/useLanguage";
 
 export default function HeroSection() {
@@ -16,7 +17,7 @@ export default function HeroSection() {
                     playsInline
                     className="absolute inset-0 w-full h-full object-cover"
                 >
-                    <source src="/videos/basketball-hero.mp4" type="video/mp4" />
+                    <source src="/videos/YatayWeb1.mp4" type="video/mp4" />
                 </video>
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-r from-background-dark/95 via-background-dark/70 to-transparent" />
@@ -35,10 +36,16 @@ export default function HeroSection() {
                     </div>
 
                     {/* Headline */}
-                    <h1 className="text-6xl lg:text-8xl font-body font-black text-white leading-[0.95] tracking-tight mb-6">
-                        {t('home.hero.title1')} <br />
-                        <span className="text-primary">{t('home.hero.title2')}</span>
-                    </h1>
+                    <div className="mb-6">
+                        <Image
+                            src="/Logos/logo(beyaz).png"
+                            alt="Strive"
+                            width={400}
+                            height={140}
+                            className="h-24 lg:h-36 w-auto"
+                            priority
+                        />
+                    </div>
 
                     {/* Description */}
                     <p className="text-lg text-gray-400 mb-10 max-w-lg font-light leading-relaxed">

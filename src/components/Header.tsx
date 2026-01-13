@@ -82,11 +82,14 @@ export default function Header({ hideSearch = false }: HeaderProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20 md:h-24">
             {/* Logo */}
-            <Link href="/" className="flex-shrink-0 flex items-center gap-2">
-              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-black">
-                <span className="material-symbols-outlined">sports_basketball</span>
-              </div>
-              <span className="font-body font-extrabold text-2xl tracking-tight text-white">Strive</span>
+            <Link href="/" className="flex-shrink-0 flex items-center">
+              <Image
+                src="/Logos/logo(beyaz).png"
+                alt="Strive"
+                width={140}
+                height={50}
+                className="h-10 w-auto"
+              />
             </Link>
 
             {/* Navigation Links - Desktop */}
@@ -324,11 +327,14 @@ export default function Header({ hideSearch = false }: HeaderProps) {
 
           {/* Footer */}
           <div className="p-6 border-t border-white/10">
-            <div className="flex items-center gap-3 text-gray-400 text-sm">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-black">
-                <span className="material-symbols-outlined text-sm">sports_basketball</span>
-              </div>
-              <span className="font-bold text-white">Strive</span>
+            <div className="flex items-center text-gray-400 text-sm">
+              <Image
+                src="/Logos/logo(beyaz).png"
+                alt="Strive"
+                width={100}
+                height={35}
+                className="h-8 w-auto"
+              />
             </div>
           </div>
         </div>
