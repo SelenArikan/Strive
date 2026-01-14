@@ -793,11 +793,11 @@ export default function AdminDashboard() {
                                         <td className="px-6 py-4">
                                             {product.originalPrice && product.originalPrice > product.price ? (
                                                 <div>
-                                                    <span className="text-gray-500 text-xs line-through">₺{product.originalPrice.toFixed(2)}</span>
-                                                    <span className="text-red-400 font-medium ml-2">₺{product.price.toFixed(2)}</span>
+                                                    <span className="text-gray-500 text-xs line-through">{product.originalPrice.toFixed(2)} ₺</span>
+                                                    <span className="text-red-400 font-medium ml-2">{product.price.toFixed(2)} ₺</span>
                                                 </div>
                                             ) : (
-                                                <span className="text-primary font-medium">₺{product.price.toFixed(2)}</span>
+                                                <span className="text-primary font-medium">{product.price.toFixed(2)} ₺</span>
                                             )}
                                         </td>
                                         <td className="px-6 py-4">

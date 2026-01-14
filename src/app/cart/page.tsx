@@ -73,9 +73,9 @@ export default function CartPage() {
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-lg font-bold">₺{item.price.toFixed(2)}</p>
+                        <p className="text-lg font-bold font-body">{item.price.toFixed(2)} ₺</p>
                         {item.originalPrice && (
-                          <p className="text-xs text-gray-400 line-through">₺{item.originalPrice.toFixed(2)}</p>
+                          <p className="text-xs text-gray-400 line-through font-body">{item.originalPrice.toFixed(2)} ₺</p>
                         )}
                       </div>
                     </div>
@@ -116,7 +116,7 @@ export default function CartPage() {
 
                       <div className="text-right">
                         <span className="text-xs text-gray-400">{t('common.total')}</span>
-                        <p className="font-bold text-primary">₺{(item.price * item.quantity).toFixed(2)}</p>
+                        <p className="font-bold text-primary font-body">{(item.price * item.quantity).toFixed(2)} ₺</p>
                       </div>
                     </div>
                   </div>
@@ -144,7 +144,7 @@ export default function CartPage() {
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600 dark:text-gray-400 text-sm">{t('cart.subtotal')} ({totalItems} {t('cart.items')})</span>
-                      <span className="font-semibold">₺{subtotal.toFixed(2)}</span>
+                      <span className="font-semibold font-body">{subtotal.toFixed(2)} ₺</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600 dark:text-gray-400 text-sm">{t('cart.shippingEstimate')}</span>
@@ -152,7 +152,7 @@ export default function CartPage() {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600 dark:text-gray-400 text-sm">{t('cart.taxEstimate')}</span>
-                      <span className="font-semibold">₺{tax.toFixed(2)}</span>
+                      <span className="font-semibold font-body">{tax.toFixed(2)} ₺</span>
                     </div>
 
                     {/* Discount Code Input */}
@@ -178,7 +178,7 @@ export default function CartPage() {
                   <div className="flex justify-between items-end mb-8">
                     <span className="text-lg font-bold">{t('cart.orderTotal')}</span>
                     <div className="text-right">
-                      <span className="text-2xl font-black tracking-tight">₺{total.toFixed(2)}</span>
+                      <span className="text-2xl font-black tracking-tight font-body">{total.toFixed(2)} ₺</span>
                       <p className="text-xs text-gray-400 mt-1">{t('common.currency')}</p>
                     </div>
                   </div>
@@ -204,10 +204,10 @@ export default function CartPage() {
                       items.forEach((item, index) => {
                         message += `${index + 1}. ${item.name} (${item.category})\n`;
                         message += `   Size: ${item.size || "Std"} | Adet: ${item.quantity}\n`;
-                        message += `   Fiyat: ₺${item.price.toFixed(2)}\n\n`;
+                        message += `   Fiyat: ${item.price.toFixed(2)} ₺\n\n`;
                       });
 
-                      message += `*Toplam Tutar: ₺${total.toFixed(2)}* (Vergi dahil)\n\n`;
+                      message += `*Toplam Tutar: ${total.toFixed(2)} ₺* (Vergi dahil)\n\n`;
                       message += `Siparişimi onaylamak istiyorum.`;
 
                       // 3. Redirect to WhatsApp

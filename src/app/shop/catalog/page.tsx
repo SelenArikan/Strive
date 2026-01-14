@@ -525,14 +525,14 @@ function CatalogContent() {
                           {/* Price with discount styling */}
                           {getDiscountPercent(product) > 0 ? (
                             <>
-                              <span className="text-sm line-through text-slate-400">₺{product.originalPrice?.toFixed(2)}</span>
-                              <span className="text-xl font-bold text-red-500">₺{product.price.toFixed(2)}</span>
+                              <span className="text-sm line-through text-slate-400 font-body">{product.originalPrice?.toFixed(2)} ₺</span>
+                              <span className="text-xl font-bold text-red-500 font-body">{product.price.toFixed(2)} ₺</span>
                               <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
                                 -{getDiscountPercent(product)}%
                               </span>
                             </>
                           ) : (
-                            <span className="text-xl font-bold">₺{product.price.toFixed(2)}</span>
+                            <span className="text-xl font-bold font-body">{product.price.toFixed(2)} ₺</span>
                           )}
                         </div>
                         <div className="flex items-center gap-1 text-xs text-amber-400">

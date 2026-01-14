@@ -98,7 +98,7 @@ export default function ProductCarousel() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         >
           {products.map((product) => (
-            <div key={product.id} className="group cursor-pointer">
+            <div key={product.id} className="group cursor-pointer min-w-0">
               {/* Product Image Container */}
               <Link href={`/shop/product/${product.id}`} className="relative bg-surface-dark rounded-2xl p-6 mb-4 overflow-hidden h-80 flex items-center justify-center border border-white/5 group-hover:border-primary/30 transition block">
                 {/* Badge */}
@@ -128,21 +128,21 @@ export default function ProductCarousel() {
 
               {/* Product Info */}
               <Link href={`/shop/product/${product.id}`}>
-                <h3 className="text-lg font-bold text-white group-hover:text-primary transition">
+                <h3 className="text-lg font-bold text-white group-hover:text-primary transition truncate">
                   {product.name}
                 </h3>
-                <p className="text-gray-500 text-sm mb-3">{product.category}</p>
+                <p className="text-gray-500 text-sm mb-3 truncate">{product.category}</p>
               </Link>
 
               {/* Price and Add to Cart */}
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-white">
-                    ₺{product.price.toFixed(2)}
+                  <span className="text-lg font-bold text-white font-body">
+                    {product.price.toFixed(2)} ₺
                   </span>
                   {product.originalPrice && product.originalPrice > product.price && (
-                    <span className="text-sm text-gray-400 line-through ml-2">
-                      ₺{product.originalPrice.toFixed(2)}
+                    <span className="text-sm text-gray-400 line-through font-body">
+                      {product.originalPrice.toFixed(2)} ₺
                     </span>
                   )}
                 </div>
@@ -158,6 +158,20 @@ export default function ProductCarousel() {
               </div>
             </div>
           ))}
+
+          {/* Video Card */}
+          <div className="group">
+            <div className="relative bg-surface-dark rounded-2xl overflow-hidden h-80 flex items-center justify-center border border-white/5 group-hover:border-primary/30 transition">
+              <video
+                src="/videos/Tanıtım_Reels1.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>

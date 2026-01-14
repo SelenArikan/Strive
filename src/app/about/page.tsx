@@ -337,7 +337,7 @@ export default function AboutPage() {
                         <div className="md:w-2/5 relative">
                             <div className="absolute -inset-4 bg-gradient-to-r from-primary to-green-600 rounded-2xl blur-lg opacity-30"></div>
                             <Image
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhPaPCLCKsoBg6HWZ6CmHO02-lN8qjz90wyYdP4TAFOy6BW6Z_p-_lD5jnwFtnTi35lUeLxZgZzSS5LENROhA-EhqdW3Y9wK4d7YWZX0dprSgOO0S6kiv1X9GO5ZnjbxYQVTQmzwlNolTEvxPWUlXB4TEx276Fr28n1pq7iC10voKXUXzUC6c3doiyya3tZB_n7Yoo5X_Zu6DuZG20ZOFSIsQkgIUTMYOfzYaEgmOHoT1fpkq5UPx2LF7XC471szwyqqQfq6fV-Kw"
+                                src="/_DSC7756.jpg"
                                 alt="Team meeting on court"
                                 width={500}
                                 height={600}

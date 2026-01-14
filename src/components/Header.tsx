@@ -165,8 +165,8 @@ export default function Header({ hideSearch = false }: HeaderProps) {
                                   <span className="truncate">{product.category}</span>
                                 </div>
                               </div>
-                              <span className="text-sm font-bold text-primary whitespace-nowrap">
-                                ₺{product.price.toFixed(2)}
+                              <span className="text-sm font-bold text-primary whitespace-nowrap font-body">
+                                {product.price.toFixed(2)} ₺
                               </span>
                             </div>
                           ))

@@ -18,7 +18,8 @@ interface Product {
     id: number;
     name: string;
     category: string;
-    sizes: number[];
+    sizes?: number[];
+    size?: number;
     courtType: string;
     price: number;
     originalPrice?: number | null;
@@ -59,6 +60,8 @@ export default function ProductDetailPage() {
                     // Set first size as default
                     if (found.sizes && found.sizes.length > 0) {
                         setSelectedSize(found.sizes[0]);
+                    } else if (found.size) {
+                        setSelectedSize(found.size);
                     }
                 }
             } catch (error) {
@@ -71,7 +74,8 @@ export default function ProductDetailPage() {
     }, [productId]);
 
     const handleAddToCart = () => {
-        if (!product || !selectedSize) return;
+        if (!product) return;
+        const sizeToAdd = selectedSize || product.size || 7; // Default to 7 if no size
         for (let i = 0; i < quantity; i++) {
             addToCart({
                 id: product.id,
@@ -80,7 +84,7 @@ export default function ProductDetailPage() {
                 price: product.price,
                 originalPrice: product.originalPrice ?? undefined,
                 image: product.image,
-                size: selectedSize,
+                size: sizeToAdd,
             });
         }
         setAddedToCart(true);
@@ -100,7 +104,7 @@ export default function ProductDetailPage() {
             console.error("Analytics error:", e);
         }
 
-        const message = `Merhaba! Bu ürünü satın almak istiyorum:\n\n*${product.name}*\nAdet: ${quantity}\nFiyat: ₺${(product.price * quantity).toFixed(2)}\n\nÜrün linki: ${window.location.href}`;
+        const message = `Merhaba! Bu ürünü satın almak istiyorum:\n\n*${product.name}*\nAdet: ${quantity}\nFiyat: ${(product.price * quantity).toFixed(2)} ₺\n\nÜrün linki: ${window.location.href}`;
         const whatsappUrl = `https://wa.me/905547970558?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, "_blank");
     };
@@ -364,10 +368,10 @@ export default function ProductDetailPage() {
                             {/* Price & Actions */}
                             <div className="space-y-6 py-2">
                                 <div className="flex items-end gap-4">
-                                    <p className="text-4xl font-bold text-primary">₺{product.price.toFixed(2)}</p>
+                                    <p className="text-4xl font-bold text-primary font-body">{product.price.toFixed(2)} ₺</p>
                                     {product.originalPrice && product.originalPrice > product.price && (
                                         <>
-                                            <p className="mb-1 text-lg text-gray-500 line-through">₺{product.originalPrice.toFixed(2)}</p>
+                                            <p className="mb-1 text-lg text-gray-500 line-through font-body">{product.originalPrice.toFixed(2)} ₺</p>
                                             <span className="mb-2 rounded bg-red-500/20 px-2 py-0.5 text-xs font-bold text-red-500">-{discount}%</span>
                                         </>
                                     )}
