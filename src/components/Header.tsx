@@ -103,6 +103,9 @@ export default function Header({ hideSearch = false }: HeaderProps) {
               <Link href="/shop" className="text-base font-medium text-gray-300 hover:text-primary transition">
                 {t('nav.shop')}
               </Link>
+              <a href="https://wa.me/905547970558" target="_blank" rel="noopener noreferrer" className="text-base font-medium text-gray-300 hover:text-primary transition">
+                {t('shop.contact')}
+              </a>
             </div>
 
             {/* Right side actions */}
@@ -286,6 +289,16 @@ export default function Header({ hideSearch = false }: HeaderProps) {
               <span className="material-symbols-outlined">info</span>
               <span className="font-medium">{t('nav.about')}</span>
             </Link>
+            <a
+              href="https://wa.me/905547970558"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition"
+            >
+              <span className="material-symbols-outlined">chat</span>
+              <span className="font-medium">{t('shop.contact')}</span>
+            </a>
             <Link
               href="/cart"
               onClick={() => setMobileMenuOpen(false)}

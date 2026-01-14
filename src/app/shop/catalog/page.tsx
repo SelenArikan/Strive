@@ -234,6 +234,9 @@ function CatalogContent() {
               <Link href="/shop" className="text-sm font-bold text-primary transition-colors">
                 {t('nav.shop')}
               </Link>
+              <a href="https://wa.me/905547970558" target="_blank" rel="noopener noreferrer" className="text-sm font-medium hover:text-primary transition-colors">
+                {t('shop.contact')}
+              </a>
             </nav>
           </div>
           <div className="flex items-center gap-3">
@@ -321,6 +324,10 @@ function CatalogContent() {
               <span className="material-symbols-outlined">info</span>
               <span className="font-medium">{t('nav.about')}</span>
             </Link>
+            <a href="https://wa.me/905547970558" target="_blank" rel="noopener noreferrer" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
+              <span className="material-symbols-outlined">chat</span>
+              <span className="font-medium">{t('shop.contact')}</span>
+            </a>
             <Link href="/cart" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
               <span className="material-symbols-outlined">shopping_cart</span>
               <span className="font-medium">{t('nav.cart')}</span>
@@ -458,46 +465,6 @@ function CatalogContent() {
                         </span>
                       </button>
                     ))}
-                  </div>
-                </div>
-
-                {/* Price Range Filter */}
-                <div>
-                  <h3 className="text-sm font-bold uppercase tracking-wider mb-4">{t('catalog.priceRange')}</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="relative flex-1">
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-sm">₺</span>
-                        <input
-                          type="text"
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          placeholder={t('catalog.min')}
-                          value={minPrice}
-                          onChange={(e) => setMinPrice(e.target.value.replace(/[^0-9]/g, ''))}
-                          className="w-full bg-surface-dark border border-white/10 text-sm rounded-lg focus:ring-1 focus:ring-primary focus:border-primary pl-7 pr-3 py-2.5 outline-none text-white placeholder-slate-500"
-                        />
-                      </div>
-                      <span className="text-slate-500 font-medium">—</span>
-                      <div className="relative flex-1">
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-sm">₺</span>
-                        <input
-                          type="text"
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          placeholder={t('catalog.max')}
-                          value={maxPrice}
-                          onChange={(e) => setMaxPrice(e.target.value.replace(/[^0-9]/g, ''))}
-                          className="w-full bg-surface-dark border border-white/10 text-sm rounded-lg focus:ring-1 focus:ring-primary focus:border-primary pl-7 pr-3 py-2.5 outline-none text-white placeholder-slate-500"
-                        />
-                      </div>
-                    </div>
-                    <button
-                      onClick={handlePriceApply}
-                      className="w-full py-2.5 bg-primary hover:bg-primary-light text-black text-sm font-bold rounded-lg transition-colors"
-                    >
-                      {t('common.apply')}
-                    </button>
                   </div>
                 </div>
 

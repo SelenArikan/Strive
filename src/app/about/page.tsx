@@ -31,6 +31,7 @@ export default function AboutPage() {
                             <Link href="/" className="text-base font-medium text-gray-300 hover:text-primary transition">{t('nav.home')}</Link>
                             <Link href="/about" className="text-base font-medium text-white hover:text-primary transition">{t('nav.about')}</Link>
                             <Link href="/shop" className="text-base font-medium text-gray-300 hover:text-primary transition">{t('nav.shop')}</Link>
+                            <a href="https://wa.me/905547970558" target="_blank" rel="noopener noreferrer" className="text-base font-medium text-gray-300 hover:text-primary transition">{t('shop.contact')}</a>
                         </div>
                         <div className="flex items-center space-x-4 md:space-x-6">
                             {/* Language Switcher */}
@@ -103,6 +104,10 @@ export default function AboutPage() {
                             <span className="material-symbols-outlined">info</span>
                             <span className="font-medium">{t('nav.about')}</span>
                         </Link>
+                        <a href="https://wa.me/905547970558" target="_blank" rel="noopener noreferrer" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
+                            <span className="material-symbols-outlined">chat</span>
+                            <span className="font-medium">{t('shop.contact')}</span>
+                        </a>
                         <Link href="/cart" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-primary transition">
                             <span className="material-symbols-outlined">shopping_cart</span>
                             <span className="font-medium">{t('nav.cart')}</span>
@@ -286,20 +291,47 @@ export default function AboutPage() {
                                     href="/Certification/TCT251117C004001-Etiket-STRIVE Silent Basketball-REACH 附录 17 PAHs 8 英文(1).pdf"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-16 h-16 bg-white rounded-lg hover:opacity-80 transition"
-                                />
+                                    className="block w-24 h-32 rounded-lg overflow-hidden border-2 border-white/20 hover:border-primary hover:scale-105 transition-all duration-300 shadow-lg"
+                                    title="REACH PAHs Certification"
+                                >
+                                    <Image
+                                        src="/Certification/thumbnails/cert1-reach-pahs.png"
+                                        alt="REACH PAHs Certificate Preview"
+                                        width={96}
+                                        height={128}
+                                        className="w-full h-full object-cover object-top"
+                                    />
+                                </a>
                                 <a
                                     href="/Certification/TCT251117C004002-Etiket-STRIVE Silent Basketball-Size 7，Size 5-EN 71-1-2-3 (2024) 英文.pdf"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-16 h-16 bg-white rounded-lg hover:opacity-80 transition"
-                                />
+                                    className="block w-24 h-32 rounded-lg overflow-hidden border-2 border-white/20 hover:border-primary hover:scale-105 transition-all duration-300 shadow-lg"
+                                    title="EN 71 Safety Certification"
+                                >
+                                    <Image
+                                        src="/Certification/thumbnails/cert2-en71.png"
+                                        alt="EN 71 Certificate Preview"
+                                        width={96}
+                                        height={128}
+                                        className="w-full h-full object-cover object-top"
+                                    />
+                                </a>
                                 <a
                                     href="/Certification/TCT251117C004003-Etiket-STRIVE Silent Basketball-REACH 附录17 邻苯 英文(1).pdf"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-16 h-16 bg-white rounded-lg hover:opacity-80 transition"
-                                />
+                                    className="block w-24 h-32 rounded-lg overflow-hidden border-2 border-white/20 hover:border-primary hover:scale-105 transition-all duration-300 shadow-lg"
+                                    title="REACH Phthalates Certification"
+                                >
+                                    <Image
+                                        src="/Certification/thumbnails/cert3-reach-phthalates.png"
+                                        alt="REACH Phthalates Certificate Preview"
+                                        width={96}
+                                        height={128}
+                                        className="w-full h-full object-cover object-top"
+                                    />
+                                </a>
                             </div>
                         </div>
                         <div className="md:w-2/5 relative">

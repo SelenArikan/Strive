@@ -26,13 +26,13 @@ export default function Footer() {
 
   const companyLinks = [
     { name: t("footer.about"), href: "/about" },
-    { name: t("footer.contact"), href: "https://wa.me/905XXXXXXXXX?text=Merhaba, ürünleriniz hakkında bilgi almak istiyorum", isExternal: true },
+    { name: t("footer.contact"), href: "https://wa.me/905547970558", isExternal: true },
   ];
 
   return (
     <footer className="bg-black text-white pt-20 pb-10 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
           {/* Brand Column */}
           <div className="col-span-1">
             <div className="mb-6">
@@ -111,20 +111,6 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* Promo Video - Vertical */}
-          <div className="rounded-2xl overflow-hidden">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover"
-              style={{ aspectRatio: '9/16' }}
-            >
-              <source src="/videos/Tanıtım_Reels1.mp4" type="video/mp4" />
-            </video>
           </div>
         </div>
 
