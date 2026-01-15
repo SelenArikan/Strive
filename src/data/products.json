@@ -1,60 +1,86 @@
 {
   "products": [
     {
-      "id": 1767089270498,
-      "name": "Silent Offical",
+      "id": 1768461859858,
+      "name": "Strive for Success",
       "mainCategory": "Basketbol Topu",
-      "category": "Indoor Series",
+      "category": "Homedoor",
       "sizes": [
-        3,
-        5,
-        7
+        5
       ],
       "courtType": "Indoor (Pro)",
-      "price": 25,
-      "originalPrice": 25,
+      "price": 1000,
+      "originalPrice": 1000,
       "rating": 4.5,
-      "image": "/uploads/product_1767089238215.png",
+      "image": "/uploads/product_1768461646681_603uij.png",
       "media": [
         {
-          "type": "video",
-          "url": "/uploads/product_1767089958387_gm1wjd.mp4"
+          "type": "image",
+          "url": "/uploads/product_1768461646681_603uij.png"
         },
         {
           "type": "image",
-          "url": "/uploads/product_1767089962021_5o2jnr.png"
+          "url": "/uploads/product_1768461793068_00v3ny.jpg"
         }
       ],
       "inStock": true,
-      "createdAt": "2025-12-30T10:07:50.498Z"
+      "createdAt": "2026-01-15T07:24:19.858Z"
     },
     {
-      "id": 1767089311414,
-      "name": "Strive for ",
+      "id": 1768461973124,
+      "name": "Pro Court",
       "mainCategory": "Basketbol Topu",
-      "category": "Outdoor Series",
-      "size": 7,
-      "courtType": "Outdoor (Street)",
-      "price": 50,
-      "originalPrice": 50,
+      "category": "Homedoor",
+      "sizes": [
+        7
+      ],
+      "courtType": "Indoor (Pro)",
+      "price": 1000,
+      "originalPrice": 1000,
       "rating": 4.5,
-      "image": "/uploads/product_1767089284906.png",
+      "image": "/uploads/product_1768461890461_ospxfo.png",
+      "media": [
+        {
+          "type": "image",
+          "url": "/uploads/product_1768461890461_ospxfo.png"
+        },
+        {
+          "type": "image",
+          "url": "/uploads/product_1768461894359_h07dfm.jpg"
+        },
+        {
+          "type": "video",
+          "url": "/uploads/product_1768461917634_irfdsh.mp4"
+        }
+      ],
       "inStock": true,
-      "createdAt": "2025-12-30T10:08:31.414Z"
+      "createdAt": "2026-01-15T07:26:13.124Z"
     },
     {
-      "id": 1767089341265,
-      "name": "Pop",
-      "mainCategory": "Basketbol Topu",
-      "category": "3X3",
-      "size": 6,
-      "courtType": "3x3 Official",
-      "price": 56,
-      "originalPrice": 56,
+      "id": 1768462124443,
+      "name": "Basket Mat",
+      "mainCategory": "Mat",
+      "category": "Homedoor",
+      "sizes": [
+        5
+      ],
+      "courtType": "Indoor (Pro)",
+      "price": 1000,
+      "originalPrice": 1000,
       "rating": 4.5,
-      "image": "/uploads/product_1767089324159.png",
+      "image": "/uploads/product_1768462084257_25mfvc.jpg",
+      "media": [
+        {
+          "type": "image",
+          "url": "/uploads/product_1768462084257_25mfvc.jpg"
+        },
+        {
+          "type": "image",
+          "url": "/uploads/product_1768462094760_m1epdq.jpg"
+        }
+      ],
       "inStock": true,
-      "createdAt": "2025-12-30T10:09:01.265Z"
+      "createdAt": "2026-01-15T07:28:44.443Z"
     }
   ],
   "sizes": [],

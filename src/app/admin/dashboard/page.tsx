@@ -43,7 +43,7 @@ export default function AdminDashboard() {
         name: "",
         mainCategory: "Basketbol Topu",
         category: "",
-        sizes: [7] as number[],
+        sizes: [] as number[],
         courtType: "Indoor (Pro)",
         price: 0,
         originalPrice: 0,
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
             name: "",
             mainCategory: "Basketbol Topu",
             category: "",
-            sizes: [7],
+            sizes: [],
             courtType: "Indoor (Pro)",
             price: 0,
             originalPrice: 0,
@@ -142,8 +142,7 @@ export default function AdminDashboard() {
     const toggleSize = (size: number) => {
         setFormData(prev => {
             if (prev.sizes.includes(size)) {
-                // Don't remove if it's the last one
-                if (prev.sizes.length === 1) return prev;
+                // Allow removing all sizes - sizes are now optional
                 return { ...prev, sizes: prev.sizes.filter(s => s !== size) };
             }
             return { ...prev, sizes: [...prev.sizes, size].sort((a, b) => a - b) };
@@ -577,7 +576,7 @@ export default function AdminDashboard() {
 
                                     {/* Sizes */}
                                     <div className="col-span-2">
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">Bedenler *</label>
+                                        <label className="block text-sm font-medium text-gray-300 mb-2">Bedenler</label>
                                         <div className="flex flex-wrap gap-3">
                                             {[
                                                 { value: 3, label: "Size 3 (Mini)" },
