@@ -1,130 +1,77 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import fs from "fs";
+import path from "path";
 
-// GET - Fetch analytics data
-export async function GET() {
+const DATA_FILE = path.join(process.cwd(), "src/data/analytics.json");
+
+// Helper to read data
+function readData() {
     try {
-        // Get analytics record
-        const { data: analytics, error: analyticsError } = await supabase
-            .from("analytics")
-            .select("*")
-            .eq("id", 1)
-            .single();
-
-        if (analyticsError && analyticsError.code !== "PGRST116") {
-            console.error("Error reading analytics:", analyticsError);
-            return NextResponse.json({ success: false, error: "Failed to read analytics" }, { status: 500 });
+        if (fs.existsSync(DATA_FILE)) {
+            const fileContent = fs.readFileSync(DATA_FILE, "utf-8");
+            return JSON.parse(fileContent);
         }
-
-        // Get daily stats (last 30 days)
-        const { data: dailyStats, error: statsError } = await supabase
-            .from("daily_stats")
-            .select("*")
-            .order("date", { ascending: false })
-            .limit(30);
-
-        if (statsError) {
-            console.error("Error reading daily stats:", statsError);
-        }
-
-        const productViews = analytics?.product_views || {};
-        const topProducts = Object.entries(productViews)
-            .sort(([, a], [, b]) => (b as number) - (a as number))
-            .slice(0, 10);
-
-        return NextResponse.json({
-            success: true,
-            purchaseClicks: analytics?.purchase_clicks || 0,
-            productViews,
-            topProducts,
-            dailyStats: (dailyStats || []).reverse(),
-        });
     } catch (error) {
-        console.error("Error reading analytics:", error);
-        return NextResponse.json({ success: false, error: "Failed to read analytics" }, { status: 500 });
+        console.error("Error reading analytics file:", error);
+    }
+    return { purchaseClicks: 0, dailyStats: [] };
+}
+
+// Helper to write data
+function writeData(data: any) {
+    try {
+        fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    } catch (error) {
+        console.error("Error writing analytics file:", error);
     }
 }
 
-// POST - Track an event
+// GET - Analytics verilerini getir
+export async function GET() {
+    const data = readData();
+    return NextResponse.json({
+        success: true,
+        purchaseClicks: data.purchaseClicks || 0,
+        dailyStats: data.dailyStats || []
+    }, {
+        headers: {
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+        }
+    });
+}
+
+// POST - Yeni olay (event) kaydet
 export async function POST(request: Request) {
     try {
-        const { type, productId, productName } = await request.json();
-        const today = new Date().toISOString().split("T")[0];
+        const body = await request.json();
+        const data = readData();
 
-        // Get current analytics
-        const { data: analytics } = await supabase
-            .from("analytics")
-            .select("*")
-            .eq("id", 1)
-            .single();
+        if (body.action === "purchase_click") {
+            data.purchaseClicks = (data.purchaseClicks || 0) + 1;
 
-        const currentClicks = analytics?.purchase_clicks || 0;
-        const currentViews = analytics?.product_views || {};
+            // Günlük istatistik güncelleme
+            const today = new Date().toISOString().split('T')[0];
+            const todayStatIndex = data.dailyStats.findIndex((s: any) => s.date === today);
 
-        if (type === "purchase") {
-            // Update purchase clicks
-            await supabase
-                .from("analytics")
-                .upsert({
-                    id: 1,
-                    purchase_clicks: currentClicks + 1,
-                    product_views: currentViews,
-                    updated_at: new Date().toISOString(),
-                });
-
-            // Update daily stats
-            const { data: todayStats } = await supabase
-                .from("daily_stats")
-                .select("*")
-                .eq("date", today)
-                .single();
-
-            if (todayStats) {
-                await supabase
-                    .from("daily_stats")
-                    .update({ purchases: todayStats.purchases + 1 })
-                    .eq("date", today);
+            if (todayStatIndex >= 0) {
+                data.dailyStats[todayStatIndex].clicks += 1;
             } else {
-                await supabase
-                    .from("daily_stats")
-                    .insert({ date: today, purchases: 1, views: 0 });
+                data.dailyStats.push({ date: today, clicks: 1 });
             }
-        } else if (type === "view" && productId) {
-            // Track product view
-            const key = `${productId}_${productName || "Unknown"}`;
-            const newViews = { ...currentViews, [key]: (currentViews[key] || 0) + 1 };
 
-            await supabase
-                .from("analytics")
-                .upsert({
-                    id: 1,
-                    purchase_clicks: currentClicks,
-                    product_views: newViews,
-                    updated_at: new Date().toISOString(),
-                });
-
-            // Update daily stats
-            const { data: todayStats } = await supabase
-                .from("daily_stats")
-                .select("*")
-                .eq("date", today)
-                .single();
-
-            if (todayStats) {
-                await supabase
-                    .from("daily_stats")
-                    .update({ views: todayStats.views + 1 })
-                    .eq("date", today);
-            } else {
-                await supabase
-                    .from("daily_stats")
-                    .insert({ date: today, purchases: 0, views: 1 });
+            // Son 30 günü tut
+            if (data.dailyStats.length > 30) {
+                data.dailyStats = data.dailyStats.slice(-30);
             }
+
+            writeData(data);
         }
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error("Error tracking event:", error);
-        return NextResponse.json({ success: false, error: "Failed to track event" }, { status: 500 });
+        console.error("Error saving analytics:", error);
+        return NextResponse.json({ success: false, error: "Failed to save data" }, { status: 500 });
     }
 }
