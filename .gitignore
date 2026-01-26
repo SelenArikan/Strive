@@ -1,0 +1,12 @@
+node_modules
+.next
+
+# Environment files (API keys, secrets)
+.env
+.env.local
+.env.development
+.env.production
+.env*.local
+
+# Vercel
+.vercel

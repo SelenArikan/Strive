@@ -1,0 +1,82 @@
+{
+  "products": [
+    {
+      "id": 1768461859858,
+      "name": "Strive for Success",
+      "mainCategory": "Basketbol Topu",
+      "category": "Basketball",
+      "size": "Size 5",
+      "courtType": "Homedoor",
+      "price": 1000,
+      "originalPrice": 1000,
+      "rating": 4.5,
+      "image": "/uploads/product_1768461646681_603uij.png",
+      "media": [
+        {
+          "type": "image",
+          "url": "/uploads/product_1768461646681_603uij.png"
+        },
+        {
+          "type": "image",
+          "url": "/uploads/product_1768461793068_00v3ny.jpg"
+        }
+      ],
+      "inStock": true,
+      "createdAt": "2026-01-15T07:24:19.858Z"
+    },
+    {
+      "id": 1768461973124,
+      "name": "Pro Court",
+      "mainCategory": "Basketbol Topu",
+      "category": "Basketball",
+      "size": "Size 7",
+      "courtType": "Homedoor",
+      "price": 1000,
+      "originalPrice": 1000,
+      "rating": 4.5,
+      "image": "/uploads/product_1768461890461_ospxfo.png",
+      "media": [
+        {
+          "type": "image",
+          "url": "/uploads/product_1768461890461_ospxfo.png"
+        },
+        {
+          "type": "image",
+          "url": "/uploads/product_1768461894359_h07dfm.jpg"
+        },
+        {
+          "type": "video",
+          "url": "/uploads/product_1768461917634_irfdsh.mp4"
+        }
+      ],
+      "inStock": true,
+      "createdAt": "2026-01-15T07:26:13.124Z"
+    },
+    {
+      "id": 1768462124443,
+      "name": "Basket Mat",
+      "mainCategory": "Mat",
+      "category": "Mat",
+      "size": "1400x800",
+      "courtType": "Homedoor",
+      "price": 1000,
+      "originalPrice": 1000,
+      "rating": 4.5,
+      "image": "/uploads/product_1768462084257_25mfvc.jpg",
+      "media": [
+        {
+          "type": "image",
+          "url": "/uploads/product_1768462084257_25mfvc.jpg"
+        },
+        {
+          "type": "image",
+          "url": "/uploads/product_1768462094760_m1epdq.jpg"
+        }
+      ],
+      "inStock": true,
+      "createdAt": "2026-01-15T07:28:44.443Z"
+    }
+  ],
+  "sizes": [],
+  "courtTypes": []
+}
