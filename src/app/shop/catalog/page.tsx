@@ -8,6 +8,13 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { useSearchParams } from "next/navigation";
 import Footer from "@/components/Footer";
 
+interface SizeVariant {
+  size: string;
+  price: number;
+  originalPrice?: number | null;
+  features?: string[];
+}
+
 interface Product {
   id: number;
   name: string;
@@ -17,6 +24,8 @@ interface Product {
   courtType: string;
   price: number;
   originalPrice?: number | null;
+  sizeVariants?: SizeVariant[];
+  shippingIncluded?: boolean;
   rating: number;
   description?: string;
   features?: string[];
@@ -113,6 +122,7 @@ function CatalogContent() {
       originalPrice: product.originalPrice || undefined,
       image: product.image,
       size: product.size,
+      shippingIncluded: product.shippingIncluded,
     });
 
     setAddedItems((prev) => [...prev, product.id]);
@@ -502,6 +512,13 @@ function CatalogContent() {
                           <span className="font-medium text-slate-500">({product.rating})</span>
                         </div>
                       </div>
+                      {/* Shipping Badge */}
+                      {product.shippingIncluded && (
+                        <div className="flex items-center gap-1 text-green-500 text-xs font-medium mt-1">
+                          <span className="material-symbols-outlined text-sm">local_shipping</span>
+                          <span>{t('product.shippingIncluded')}</span>
+                        </div>
+                      )}
                       <button
                         onClick={(e) => {
                           e.preventDefault();
@@ -560,11 +577,11 @@ function CatalogContent() {
             </div>
           </div>
         </div>
-      </main>
+      </main >
 
       {/* Footer */}
-      <Footer />
-    </div>
+      < Footer />
+    </div >
   );
 }
 

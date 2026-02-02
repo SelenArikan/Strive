@@ -129,7 +129,41 @@ export const en = {
             time2d: "2 days ago",
             time1w: "1 week ago",
             time2w: "2 weeks ago",
-        }
+        },
+        shippingIncluded: "Shipping Included",
+        sizeSpecificFeatures: "Showing features specific to {size}",
+    },
+    productSpecs: {
+        // Ball specifications
+        ballDiameter: "Ball Diameter",
+        diameter: "Diameter",
+        material: "Material",
+        weight: "Weight",
+        layers: "Layers",
+        layer: "Layer",
+        // Layer types
+        baseLayer: "Base Layer",
+        middleLayer: "Middle Layer",
+        topLayer: "Top Layer",
+        nonSlipBase: "Non-Slip Base",
+        // Materials
+        puFoam: "Polyurethane (PU) Foam",
+        polyester: "Polyester",
+        rubber: "Rubber",
+        leather: "Leather",
+        synthetic: "Synthetic",
+        // Size related
+        size: "Size",
+        dimensions: "Dimensions",
+        circumference: "Circumference",
+        // Other specs
+        color: "Color",
+        suitable: "Suitable Age",
+        indoor: "Indoor",
+        outdoor: "Outdoor",
+        usage: "Usage",
+        warranty: "Warranty",
+        origin: "Origin",
     },
     cart: {
         yourCart: "Your Cart",
@@ -222,7 +256,7 @@ export const en = {
         description: "Choose STRIVE Silent Basketball Balls and equipment for performance, durability, and flawless muscle memory in every dribble.",
         descriptionHighlight: "We don't just make basketballs; ",
         descriptionHighlightBold: "we design tools for your success.",
-        discover: "Discover Technology",
+        discover: "Discover Products",
         cards: {
             silent: {
                 title: "Silent Play Technology",

@@ -1,15 +1,89 @@
 {
   "products": [
     {
+      "id": 1770040442713,
+      "name": "Strive Ball + Mat",
+      "mainCategory": "Antrenman Ekipmanları",
+      "category": "Home Training",
+      "size": "140cmx 80cm + Size 5, 140cmx 80cm + Size 7",
+      "courtType": "",
+      "price": 3350,
+      "originalPrice": null,
+      "sizeVariants": [
+        {
+          "size": "140cmx 80cm + Size 5",
+          "price": 3350,
+          "features": [
+            "Top çapı :  22",
+            "5 cm",
+            "Malzeme : Poliüretan (PU) Köpük",
+            "3 katman  -",
+            "1. Katman Kaymaz Taban",
+            "orta katman poliüretan Sünger",
+            "üst katman polyester diye ekleyelim"
+          ]
+        },
+        {
+          "size": "140cmx 80cm + Size 7",
+          "price": 3400,
+          "features": [
+            "Top çapı :  24cm",
+            "Malzeme : Poliüretan (PU) Köpük",
+            "3 katman",
+            "1. Katman Kaymaz Taban",
+            "orta katman poliüretan Sünger",
+            "üst katman polyester diye ekleyelim"
+          ]
+        }
+      ],
+      "shippingIncluded": true,
+      "rating": 4.5,
+      "description": "-Ana Malzeme Poliüretan \n– 3 Yaş ve üzeri \n– Küçük parçalar içerir. \n– Boğulma tehlikesi vardır. \n",
+      "image": "/uploads/product_1770040197097_quv51n.jpg",
+      "media": [
+        {
+          "type": "image",
+          "url": "/uploads/product_1770040197097_quv51n.jpg"
+        },
+        {
+          "type": "video",
+          "url": "/uploads/product_1770040200547_4d2u5d.mp4"
+        },
+        {
+          "type": "image",
+          "url": "/uploads/product_1770040224835_zuwjtp.jpg"
+        }
+      ],
+      "inStock": true,
+      "createdAt": "2026-02-02T13:54:02.713Z"
+    },
+    {
       "id": 1768461859858,
-      "name": "Strive for Success",
+      "name": "Strive Ball No.5",
       "mainCategory": "Basketbol Topu",
       "category": "Basketball",
-      "size": "Size 5",
+      "size": "Size 5, Size 7",
       "courtType": "Homedoor",
-      "price": 1000,
-      "originalPrice": 1000,
+      "price": 2400,
+      "originalPrice": null,
+      "sizeVariants": [
+        {
+          "size": "Size 5",
+          "price": 2400
+        },
+        {
+          "size": "Size 7",
+          "price": 2450
+        }
+      ],
+      "shippingIncluded": true,
       "rating": 4.5,
+      "description": "-Ana Malzeme Poliüretan \n– 3 Yaş ve üzeri \n– Küçük parçalar içerir. \n– Boğulma tehlikesi vardır. \n\nCE Certificate of Compliance / Uygunluk Belgeli ",
+      "features": [
+        "Top çapı :  22",
+        "5 cm",
+        "Malzeme :Poliüretan (PU) Köpük"
+      ],
       "image": "/uploads/product_1768461646681_603uij.png",
       "media": [
         {
@@ -26,14 +100,30 @@
     },
     {
       "id": 1768461973124,
-      "name": "Pro Court",
+      "name": "Strive Ball No.7",
       "mainCategory": "Basketbol Topu",
       "category": "Basketball",
-      "size": "Size 7",
+      "size": "Size 5, Size 7",
       "courtType": "Homedoor",
-      "price": 1000,
-      "originalPrice": 1000,
+      "price": 2450,
+      "originalPrice": null,
+      "sizeVariants": [
+        {
+          "size": "Size 5",
+          "price": 2400
+        },
+        {
+          "size": "Size 7",
+          "price": 2450
+        }
+      ],
+      "shippingIncluded": true,
       "rating": 4.5,
+      "description": "-Ana Malzeme Poliüretan \n– 3 Yaş ve üzeri \n– Küçük parçalar içerir. \n– Boğulma tehlikesi vardır. \n\nCE Certificate of Compliance / Uygunluk Belgeli \nCE Certificate of Compliance / Uygunluk Belgeli ",
+      "features": [
+        "Top çapı : 24 cm",
+        "Malzeme : Poliüretan (PU) Köpük"
+      ],
       "image": "/uploads/product_1768461890461_ospxfo.png",
       "media": [
         {
@@ -59,9 +149,16 @@
       "category": "Mat",
       "size": "1400x800",
       "courtType": "Homedoor",
-      "price": 1000,
-      "originalPrice": 1000,
+      "price": 950,
+      "originalPrice": null,
+      "shippingIncluded": true,
       "rating": 4.5,
+      "features": [
+        "3 katman",
+        "1. Katman Kaymaz Taban",
+        "orta katman poliüretan Sünger",
+        "üst katman polyester diye ekleyelim"
+      ],
       "image": "/uploads/product_1768462084257_25mfvc.jpg",
       "media": [
         {

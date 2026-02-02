@@ -129,7 +129,41 @@ export const tr = {
             time2d: "2 gün önce",
             time1w: "1 hafta önce",
             time2w: "2 hafta önce",
-        }
+        },
+        shippingIncluded: "Kargo Dahil",
+        sizeSpecificFeatures: "{size} bedeni için özel özellikler gösteriliyor",
+    },
+    productSpecs: {
+        // Ball specifications
+        ballDiameter: "Top Çapı",
+        diameter: "Çap",
+        material: "Malzeme",
+        weight: "Ağırlık",
+        layers: "Katman",
+        layer: "Katman",
+        // Layer types
+        baseLayer: "Alt Katman",
+        middleLayer: "Orta Katman",
+        topLayer: "Üst Katman",
+        nonSlipBase: "Kaymaz Taban",
+        // Materials
+        puFoam: "Poliüretan (PU) Köpük",
+        polyester: "Polyester",
+        rubber: "Kauçuk",
+        leather: "Deri",
+        synthetic: "Sentetik",
+        // Size related
+        size: "Beden",
+        dimensions: "Boyutlar",
+        circumference: "Çevre",
+        // Other specs
+        color: "Renk",
+        suitable: "Uygun Yaş",
+        indoor: "İç Mekan",
+        outdoor: "Dış Mekan",
+        usage: "Kullanım Alanı",
+        warranty: "Garanti",
+        origin: "Menşei",
     },
     cart: {
         yourCart: "Sepetiniz",
@@ -176,7 +210,7 @@ export const tr = {
         journeyQuote: "\"“STRIVE” yani “Çabalamak” adını verdiğimiz bu özel top için oluşturduğumuz “STRIVE for Success / Başarı İçin Çabala” sloganı ile; gençlerimizin ev ve benzeri iç mekânlarda güvenle, sessizce ve verimli şekilde antrenman yapabilmelerini hedefliyoruz.\"",
         journeyText4: "30 yıllık ticari tecrübemizi ve üretim disiplinimizi; eğitim ve spor yoluyla çocuklarımıza katkı sağlayacak bir projeye dönüştürmenin mutluluğunu yaşıyoruz. STRIVE, bizim için yalnızca bir ürün değil; disiplin, emek ve idealizmin bir yansımasıdır.",
         stats: {
-            title: "Rakamlarla Biz",
+            title: "",
             years: "Yıllık Tecrübe",
             sold: "Satılan Top",
             countries: "Hizmet Verilen Ülke",
@@ -222,7 +256,7 @@ export const tr = {
         description: "Performans, dayanıklılık ve her dribbling'de kusursuz bir kas hafızası için STRIVE Sessiz Basketbol Toplarını ve ekipmanlarını seçmelisiniz.",
         descriptionHighlight: "Biz sadece sessiz basketbol topu sunmuyoruz; ",
         descriptionHighlightBold: "başarın için araçlar düşünüyoruz.",
-        discover: "Teknolojiyi Keşfet",
+        discover: "Ürünleri Keşfet",
         cards: {
             silent: {
                 title: "Sessiz Oyun Teknolojisi",

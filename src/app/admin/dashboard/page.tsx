@@ -10,6 +10,18 @@ interface MediaItem {
     url: string;
 }
 
+interface SizeVariant {
+    size: string;
+    price: number;
+    originalPrice?: number | null;
+    features?: string[];
+}
+
+interface BundleItem {
+    name: string;
+    sizes: string[];
+}
+
 interface Product {
     id: number;
     name: string;
@@ -19,6 +31,9 @@ interface Product {
     courtType: string;
     price: number;
     originalPrice?: number | null;
+    sizeVariants?: SizeVariant[];
+    bundleItems?: BundleItem[];
+    shippingIncluded?: boolean;
     rating: number;
     description?: string;
     features?: string[];
@@ -37,6 +52,7 @@ export default function AdminDashboard() {
     const [isSaving, setIsSaving] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [message, setMessage] = useState({ type: "", text: "" });
+    const [showDiscountField, setShowDiscountField] = useState(false);
 
     // Form state
     const [formData, setFormData] = useState({
@@ -47,6 +63,9 @@ export default function AdminDashboard() {
         courtType: "",
         price: 0,
         originalPrice: 0,
+        sizeVariants: [] as SizeVariant[],
+        bundleItems: [] as BundleItem[],
+        shippingIncluded: false,
         rating: 4.5,
         description: "",
         features: "",
@@ -109,6 +128,9 @@ export default function AdminDashboard() {
             courtType: "",
             price: 0,
             originalPrice: 0,
+            sizeVariants: [],
+            bundleItems: [],
+            shippingIncluded: false,
             rating: 4.5,
             description: "",
             features: "",
@@ -117,6 +139,7 @@ export default function AdminDashboard() {
             inStock: true,
         });
         setEditingProduct(null);
+        setShowDiscountField(false);
     };
 
     const handleEdit = (product: Product) => {
@@ -129,6 +152,9 @@ export default function AdminDashboard() {
             courtType: product.courtType || "",
             price: product.price,
             originalPrice: product.originalPrice || 0,
+            sizeVariants: product.sizeVariants || [],
+            bundleItems: product.bundleItems || [],
+            shippingIncluded: product.shippingIncluded || false,
             rating: product.rating || 4.5,
             description: product.description || "",
             features: product.features?.join(", ") || "",
@@ -136,6 +162,7 @@ export default function AdminDashboard() {
             media: product.media || [],
             inStock: product.inStock ?? true,
         });
+        setShowDiscountField(!!product.originalPrice && product.originalPrice > 0);
         setShowForm(true);
     };
 
@@ -209,6 +236,9 @@ export default function AdminDashboard() {
             courtType: formData.courtType,
             price: formData.price,
             originalPrice: formData.originalPrice > 0 ? formData.originalPrice : null,
+            sizeVariants: formData.sizeVariants.length > 0 ? formData.sizeVariants : undefined,
+            bundleItems: formData.bundleItems.length > 0 ? formData.bundleItems : undefined,
+            shippingIncluded: formData.shippingIncluded,
             rating: formData.rating,
             description: formData.description || undefined,
             features: formData.features ? formData.features.split(",").map((f) => f.trim()) : undefined,
@@ -559,16 +589,178 @@ export default function AdminDashboard() {
                                         </select>
                                     </div>
 
-                                    {/* Size - Text Input */}
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Beden</label>
-                                        <input
-                                            type="text"
-                                            value={formData.size}
-                                            onChange={(e) => setFormData({ ...formData, size: e.target.value })}
-                                            className="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary"
-                                            placeholder="Örn: Size 5, Size 7, M, L, XL"
-                                        />
+                                    {/* Size - Multi Select Checkboxes */}
+                                    <div className="col-span-2">
+                                        <label className="block text-sm font-medium text-gray-300 mb-2">Beden Seçimi</label>
+                                        <div className="flex flex-wrap gap-3 mb-3">
+                                            {["Size 1", "Size 2", "Size 3", "Size 4", "Size 5", "Size 6", "Size 7"].map((sizeOption) => {
+                                                const selectedSizes = formData.size ? formData.size.split(", ").filter(s => s.trim()) : [];
+                                                const isSelected = selectedSizes.includes(sizeOption);
+                                                return (
+                                                    <button
+                                                        key={sizeOption}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            let newSizes: string[];
+                                                            if (isSelected) {
+                                                                newSizes = selectedSizes.filter(s => s !== sizeOption);
+                                                            } else {
+                                                                newSizes = [...selectedSizes, sizeOption].sort((a, b) => {
+                                                                    const numA = parseInt(a.replace("Size ", "")) || 999;
+                                                                    const numB = parseInt(b.replace("Size ", "")) || 999;
+                                                                    return numA - numB;
+                                                                });
+                                                            }
+                                                            setFormData({ ...formData, size: newSizes.join(", ") });
+                                                        }}
+                                                        className={`px-4 py-2 rounded-lg font-medium text-sm transition-all border ${isSelected
+                                                            ? "bg-primary text-black border-primary"
+                                                            : "bg-background-dark text-gray-400 border-white/10 hover:border-primary/50 hover:text-white"
+                                                            }`}
+                                                    >
+                                                        {sizeOption}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+
+                                        {/* Custom Size Input */}
+                                        <div className="flex gap-2 items-center">
+                                            <input
+                                                type="text"
+                                                id="customSizeInput"
+                                                placeholder="Özel beden ekle (Örn: M, L, XL)"
+                                                className="flex-1 bg-background-dark border border-white/10 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-primary"
+                                                onKeyDown={(e) => {
+                                                    if (e.key === "Enter") {
+                                                        e.preventDefault();
+                                                        const input = e.target as HTMLInputElement;
+                                                        const customSize = input.value.trim();
+                                                        if (customSize) {
+                                                            const selectedSizes = formData.size ? formData.size.split(", ").filter(s => s.trim()) : [];
+                                                            if (!selectedSizes.includes(customSize)) {
+                                                                const newSizes = [...selectedSizes, customSize];
+                                                                setFormData({ ...formData, size: newSizes.join(", ") });
+                                                            }
+                                                            input.value = "";
+                                                        }
+                                                    }
+                                                }}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const input = document.getElementById("customSizeInput") as HTMLInputElement;
+                                                    const customSize = input?.value.trim();
+                                                    if (customSize) {
+                                                        const selectedSizes = formData.size ? formData.size.split(", ").filter(s => s.trim()) : [];
+                                                        if (!selectedSizes.includes(customSize)) {
+                                                            const newSizes = [...selectedSizes, customSize];
+                                                            setFormData({ ...formData, size: newSizes.join(", ") });
+                                                        }
+                                                        input.value = "";
+                                                    }
+                                                }}
+                                                className="px-4 py-2 bg-primary/20 text-primary border border-primary/30 rounded-lg text-sm font-medium hover:bg-primary hover:text-black transition-all"
+                                            >
+                                                <span className="material-symbols-outlined text-lg">add</span>
+                                            </button>
+                                        </div>
+
+                                        {/* Selected Sizes Display */}
+                                        {formData.size && (
+                                            <div className="mt-3 flex flex-wrap gap-2">
+                                                {formData.size.split(", ").filter(s => s.trim()).map((size, idx) => (
+                                                    <span
+                                                        key={idx}
+                                                        className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-sm"
+                                                    >
+                                                        {size}
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                const newSizes = formData.size.split(", ").filter(s => s.trim() && s !== size);
+                                                                setFormData({ ...formData, size: newSizes.join(", ") });
+                                                            }}
+                                                            className="hover:text-red-400 transition-colors"
+                                                        >
+                                                            <span className="material-symbols-outlined text-sm">close</span>
+                                                        </button>
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {/* Size-based Pricing & Features */}
+                                        {formData.size && formData.size.split(", ").filter(s => s.trim()).length > 1 && (
+                                            <div className="mt-4 p-4 bg-background-dark/50 rounded-lg border border-white/10">
+                                                <div className="flex items-center justify-between mb-3">
+                                                    <label className="text-sm font-medium text-primary flex items-center gap-2">
+                                                        <span className="material-symbols-outlined text-lg">paid</span>
+                                                        Beden Bazlı Fiyat & Özellikler
+                                                    </label>
+                                                    <span className="text-xs text-gray-500">Her beden için farklı fiyat ve özellik belirleyin</span>
+                                                </div>
+                                                <div className="space-y-4">
+                                                    {formData.size.split(", ").filter(s => s.trim()).map((size) => {
+                                                        const existingVariant = formData.sizeVariants.find(v => v.size === size);
+                                                        return (
+                                                            <div key={size} className="p-3 bg-surface-dark/50 rounded-lg border border-white/5">
+                                                                <div className="flex items-center gap-3 mb-2">
+                                                                    <span className="text-sm font-bold text-primary w-16 shrink-0">{size}</span>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={existingVariant?.price || ""}
+                                                                        onChange={(e) => {
+                                                                            const val = e.target.value;
+                                                                            if (/^\d*\.?\d*$/.test(val)) {
+                                                                                const newVariants = formData.sizeVariants.filter(v => v.size !== size);
+                                                                                if (val || existingVariant?.features) {
+                                                                                    newVariants.push({
+                                                                                        size,
+                                                                                        price: Number(val) || formData.price,
+                                                                                        features: existingVariant?.features
+                                                                                    });
+                                                                                }
+                                                                                setFormData({ ...formData, sizeVariants: newVariants });
+                                                                            }
+                                                                        }}
+                                                                        className="w-28 bg-background-dark border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:outline-none focus:border-primary"
+                                                                        placeholder="Fiyat"
+                                                                    />
+                                                                    <span className="text-xs text-gray-500">₺</span>
+                                                                </div>
+                                                                <div className="flex items-start gap-3">
+                                                                    <span className="text-xs text-gray-500 w-16 shrink-0 pt-2">Özellikler:</span>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={existingVariant?.features?.join(", ") || ""}
+                                                                        onChange={(e) => {
+                                                                            const featuresText = e.target.value;
+                                                                            const featuresArray = featuresText ? featuresText.split(",").map(f => f.trim()).filter(f => f) : undefined;
+                                                                            const newVariants = formData.sizeVariants.filter(v => v.size !== size);
+                                                                            if (existingVariant?.price || featuresArray) {
+                                                                                newVariants.push({
+                                                                                    size,
+                                                                                    price: existingVariant?.price || formData.price,
+                                                                                    features: featuresArray
+                                                                                });
+                                                                            }
+                                                                            setFormData({ ...formData, sizeVariants: newVariants });
+                                                                        }}
+                                                                        className="flex-1 bg-background-dark border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:outline-none focus:border-primary"
+                                                                        placeholder="Ör: 28.5 inç çap, 600g ağırlık (virgülle ayırın)"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                                <p className="text-xs text-gray-500 mt-3">
+                                                    💡 Boş bırakılan bedenler ana fiyat ve özellikleri kullanır
+                                                </p>
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* Court Type */}
@@ -604,30 +796,56 @@ export default function AdminDashboard() {
                                         />
                                     </div>
 
-                                    {/* Original Price (for discount) */}
+                                    {/* Discount Toggle & Original Price */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">
-                                            Orijinal Fiyat (₺) <span className="text-red-400">(İndirim için)</span>
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={formData.originalPrice}
-                                            onChange={(e) => {
-                                                const val = e.target.value;
-                                                if (/^\d*\.?\d*$/.test(val)) {
-                                                    setFormData({ ...formData, originalPrice: val as any });
-                                                }
-                                            }}
-                                            onBlur={(e) => {
-                                                setFormData({ ...formData, originalPrice: Number(e.target.value) });
-                                            }}
-                                            className="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary"
-                                            placeholder="0 = İndirim yok"
-                                        />
-                                        {Number(formData.originalPrice) > 0 && Number(formData.price) > 0 && Number(formData.originalPrice) > Number(formData.price) && (
-                                            <p className="text-red-400 text-sm mt-1">
-                                                %{Math.round(((Number(formData.originalPrice) - Number(formData.price)) / Number(formData.originalPrice)) * 100)} indirim uygulanacak
-                                            </p>
+                                        {!showDiscountField ? (
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowDiscountField(true)}
+                                                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg text-sm font-medium hover:bg-red-500/20 transition-all"
+                                            >
+                                                <span className="material-symbols-outlined text-lg">local_offer</span>
+                                                İndirim Ekle
+                                            </button>
+                                        ) : (
+                                            <div>
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <label className="block text-sm font-medium text-red-400">
+                                                        Orijinal Fiyat (₺)
+                                                    </label>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setShowDiscountField(false);
+                                                            setFormData({ ...formData, originalPrice: 0 });
+                                                        }}
+                                                        className="text-gray-400 hover:text-red-400 text-xs flex items-center gap-1"
+                                                    >
+                                                        <span className="material-symbols-outlined text-sm">close</span>
+                                                        İndirimi Kaldır
+                                                    </button>
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    value={formData.originalPrice}
+                                                    onChange={(e) => {
+                                                        const val = e.target.value;
+                                                        if (/^\d*\.?\d*$/.test(val)) {
+                                                            setFormData({ ...formData, originalPrice: val as any });
+                                                        }
+                                                    }}
+                                                    onBlur={(e) => {
+                                                        setFormData({ ...formData, originalPrice: Number(e.target.value) });
+                                                    }}
+                                                    className="w-full bg-background-dark border border-red-500/30 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500"
+                                                    placeholder="İndirimden önceki fiyat"
+                                                />
+                                                {Number(formData.originalPrice) > 0 && Number(formData.price) > 0 && Number(formData.originalPrice) > Number(formData.price) && (
+                                                    <p className="text-red-400 text-sm mt-1 font-medium">
+                                                        %{Math.round(((Number(formData.originalPrice) - Number(formData.price)) / Number(formData.originalPrice)) * 100)} indirim uygulanacak
+                                                    </p>
+                                                )}
+                                            </div>
                                         )}
                                     </div>
 
@@ -645,8 +863,8 @@ export default function AdminDashboard() {
                                         />
                                     </div>
 
-                                    {/* In Stock */}
-                                    <div className="flex items-center">
+                                    {/* In Stock & Shipping */}
+                                    <div className="col-span-2 flex flex-wrap gap-6">
                                         <label className="flex items-center gap-3 cursor-pointer">
                                             <input
                                                 type="checkbox"
@@ -655,6 +873,18 @@ export default function AdminDashboard() {
                                                 className="w-5 h-5 rounded border-white/10 bg-background-dark text-primary focus:ring-primary"
                                             />
                                             <span className="text-sm text-gray-300">Stokta Var</span>
+                                        </label>
+                                        <label className="flex items-center gap-3 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={formData.shippingIncluded}
+                                                onChange={(e) => setFormData({ ...formData, shippingIncluded: e.target.checked })}
+                                                className="w-5 h-5 rounded border-white/10 bg-background-dark text-green-500 focus:ring-green-500"
+                                            />
+                                            <span className="text-sm text-gray-300 flex items-center gap-1">
+                                                <span className="material-symbols-outlined text-green-500 text-lg">local_shipping</span>
+                                                Kargo Dahil
+                                            </span>
                                         </label>
                                     </div>
 

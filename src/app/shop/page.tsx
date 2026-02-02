@@ -339,14 +339,14 @@ export default function ShopLandingPage() {
 
               {/* Main Heading */}
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black uppercase leading-[0.95] tracking-tight">
-                <span className="text-white">OYUNUNU</span>
+                <span className="text-white">{t('shop.unleashTitle1')}</span>
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a08070] via-[#7a6a5a] to-[#504540] italic">SERBEST BIRAK</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a08070] via-[#7a6a5a] to-[#504540] italic">{t('shop.unleashTitle2')}</span>
               </h1>
 
               {/* Description */}
               <p className="max-w-md text-gray-500 text-sm sm:text-base leading-relaxed">
-                Her yerde Sessizce oynamak için tasarlandı.
+                {t('shop.heroDescription')}
               </p>
 
               {/* CTA Buttons */}
@@ -355,13 +355,13 @@ export default function ShopLandingPage() {
                   href="/shop/catalog"
                   className="flex items-center justify-center rounded-full bg-primary px-8 py-4 text-sm font-bold uppercase tracking-wider text-black hover:bg-[#ff8c1a] hover:scale-105 transition-all shadow-[0_0_30px_rgba(242,127,13,0.4)]"
                 >
-                  MAĞAZAYI KEŞFET
+                  {t('shop.shopCollection')}
                 </Link>
                 <button
                   onClick={() => setShowVideoModal(true)}
                   className="flex items-center gap-3 rounded-full border border-[#3a3530] bg-[#1a1816] px-8 py-4 text-sm font-bold uppercase tracking-wider text-white hover:border-white/30 hover:bg-[#252220] transition-all"
                 >
-                  VİDEOYU İZLE
+                  {t('shop.watchFilm')}
                   <span className="flex items-center justify-center w-6 h-6 rounded-full border border-white/30">
                     <span className="material-symbols-outlined text-sm">play_arrow</span>
                   </span>
@@ -397,9 +397,9 @@ export default function ShopLandingPage() {
           <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 sm:px-10 py-4">
             <div className="flex items-center gap-3">
               {[
-                { key: 'all', label: 'TÜMÜ' },
-                { key: 'indoor', label: 'İÇ SAHA' },
-                { key: 'outdoor', label: 'DIŞ SAHA' },
+                { key: 'all', label: t('shop.all') },
+                { key: 'indoor', label: t('shop.indoor') },
+                { key: 'outdoor', label: t('shop.outdoor') },
               ].map((filter) => (
                 <button
                   key={filter.key}
@@ -414,9 +414,9 @@ export default function ShopLandingPage() {
               ))}
             </div>
             <div className="hidden md:flex items-center gap-3">
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">SIRALA:</span>
+              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">{t('shop.sortBy')}</span>
               <button className="flex items-center gap-1 text-sm font-medium text-white hover:text-primary transition-colors">
-                Öne Çıkanlar <span className="material-symbols-outlined text-lg">keyboard_arrow_down</span>
+                {t('catalog.featured')} <span className="material-symbols-outlined text-lg">keyboard_arrow_down</span>
               </button>
             </div>
           </div>

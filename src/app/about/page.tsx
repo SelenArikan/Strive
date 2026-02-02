@@ -371,31 +371,16 @@ export default function AboutPage() {
                     style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/carbon-fibre.png')" }}
                 ></div>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-                    <h2 className="text-4xl md:text-5xl font-black text-black mb-12 uppercase tracking-tight">{t('about.stats.title')}</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-                        <div className="bg-black/10 backdrop-blur-sm p-6 rounded-xl border border-black/5">
-                            <p className="text-5xl font-display font-bold text-black mb-2">10+</p>
-                            <p className="text-sm font-bold uppercase tracking-widest text-black/70">{t('about.stats.years')}</p>
-                        </div>
-                        <div className="bg-black/10 backdrop-blur-sm p-6 rounded-xl border border-black/5">
-                            <p className="text-5xl font-display font-bold text-black mb-2">50k+</p>
-                            <p className="text-sm font-bold uppercase tracking-widest text-black/70">{t('about.stats.sold')}</p>
-                        </div>
-                        <div className="bg-black/10 backdrop-blur-sm p-6 rounded-xl border border-black/5">
-                            <p className="text-5xl font-display font-bold text-black mb-2">12</p>
-                            <p className="text-sm font-bold uppercase tracking-widest text-black/70">{t('about.stats.countries')}</p>
-                        </div>
-                        <div className="bg-black/10 backdrop-blur-sm p-6 rounded-xl border border-black/5">
-                            <p className="text-5xl font-display font-bold text-black mb-2">100%</p>
-                            <p className="text-sm font-bold uppercase tracking-widest text-black/70">{t('about.stats.approved')}</p>
-                        </div>
+                    {/* Strive Logo */}
+                    <div className="py-8">
+                        <Image
+                            src="/Logos/logo(beyaz).png"
+                            alt="Strive"
+                            width={500}
+                            height={150}
+                            className="mx-auto h-32 md:h-40 lg:h-48 w-auto"
+                        />
                     </div>
-                    <Link
-                        href="/shop"
-                        className="inline-block px-10 py-4 bg-black text-white font-bold text-lg rounded-full hover:bg-white hover:text-black transition-all duration-300 shadow-xl transform hover:-translate-y-1"
-                    >
-                        {t('about.stats.join')}
-                    </Link>
                 </div>
             </section>
 

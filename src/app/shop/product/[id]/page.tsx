@@ -14,6 +14,13 @@ interface MediaItem {
     url: string;
 }
 
+interface SizeVariant {
+    size: string;
+    price: number;
+    originalPrice?: number | null;
+    features?: string[];
+}
+
 interface Product {
     id: number;
     name: string;
@@ -23,6 +30,8 @@ interface Product {
     courtType: string;
     price: number;
     originalPrice?: number | null;
+    sizeVariants?: SizeVariant[];
+    shippingIncluded?: boolean;
     rating: number;
     description?: string;
     features?: string[];
@@ -57,11 +66,16 @@ export default function ProductDetailPage() {
                     setProduct(found);
                     setSelectedMedia(found.image);
                     setSelectedMediaType("image");
-                    // Set first size as default
-                    if (found.sizes && found.sizes.length > 0) {
+                    // Set first size as default (check sizeVariants first)
+                    if (found.sizeVariants && found.sizeVariants.length > 0) {
+                        setSelectedSize(found.sizeVariants[0].size);
+                    } else if (found.sizes && found.sizes.length > 0) {
                         setSelectedSize(found.sizes[0]);
                     } else if (found.size) {
-                        setSelectedSize(found.size);
+                        const sizes = found.size.split(", ").filter((s: string) => s.trim());
+                        if (sizes.length > 0) {
+                            setSelectedSize(sizes[0]);
+                        }
                     }
                 }
             } catch (error) {
@@ -76,15 +90,17 @@ export default function ProductDetailPage() {
     const handleAddToCart = () => {
         if (!product) return;
         const sizeToAdd = selectedSize || product.size || "";
+        const priceToAdd = getCurrentPrice();
         for (let i = 0; i < quantity; i++) {
             addToCart({
                 id: product.id,
                 name: product.name,
                 category: product.category,
-                price: product.price,
-                originalPrice: product.originalPrice ?? undefined,
+                price: priceToAdd,
+                originalPrice: getCurrentOriginalPrice() ?? undefined,
                 image: product.image,
                 size: sizeToAdd,
+                shippingIncluded: product.shippingIncluded,
             });
         }
         setAddedToCart(true);
@@ -104,14 +120,128 @@ export default function ProductDetailPage() {
             console.error("Analytics error:", e);
         }
 
-        const message = `Merhaba! Bu ürünü satın almak istiyorum:\n\n*${product.name}*\nAdet: ${quantity}\nFiyat: ${(product.price * quantity).toFixed(2)} ₺\n\nÜrün linki: ${window.location.href}`;
+        const message = `Merhaba! Bu ürünü satın almak istiyorum:\n\n*${product.name}*\nAdet: ${quantity}\nFiyat: ${(getCurrentPrice() * quantity).toFixed(2)} ₺\n\nÜrün linki: ${window.location.href}`;
         const whatsappUrl = `https://wa.me/905547970558?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, "_blank");
     };
 
+    // Get current price based on selected size
+    const getCurrentPrice = () => {
+        if (!product) return 0;
+        if (selectedSize && product.sizeVariants) {
+            const variant = product.sizeVariants.find(v => v.size === selectedSize);
+            if (variant) return variant.price;
+        }
+        return product.price;
+    };
+
+    // Get original price for discount display based on selected size
+    const getCurrentOriginalPrice = () => {
+        if (!product) return null;
+        if (selectedSize && product.sizeVariants) {
+            const variant = product.sizeVariants.find(v => v.size === selectedSize);
+            if (variant?.originalPrice) return variant.originalPrice;
+        }
+        return product.originalPrice;
+    };
+
+    // Get available sizes from product
+    const getAvailableSizes = (): string[] => {
+        if (!product) return [];
+        if (product.sizeVariants && product.sizeVariants.length > 0) {
+            return product.sizeVariants.map(v => v.size);
+        }
+        if (product.sizes && product.sizes.length > 0) {
+            return product.sizes;
+        }
+        if (product.size) {
+            return product.size.split(", ").filter(s => s.trim());
+        }
+        return [];
+    };
+
+    // Get current features based on selected size
+    const getCurrentFeatures = (): string[] => {
+        if (!product) return [];
+        if (selectedSize && product.sizeVariants) {
+            const variant = product.sizeVariants.find(v => v.size === selectedSize);
+            if (variant?.features && variant.features.length > 0) {
+                return variant.features;
+            }
+        }
+        return product.features || [];
+    };
+
+    // Helper function to translate technical features
+    const translateFeature = (feature: string): string => {
+        if (!feature) return "";
+        let translated = feature;
+
+        // Map Turkish terms to translation keys
+        const termMap: Record<string, string> = {
+            "Top çapı": "productSpecs.ballDiameter",
+            "Top Çapı": "productSpecs.ballDiameter",
+            "Çap": "productSpecs.diameter",
+            "Malzeme": "productSpecs.material",
+            "Ağırlık": "productSpecs.weight",
+            "Katman": "productSpecs.layers",
+            "Alt Katman": "productSpecs.baseLayer",
+            "Orta Katman": "productSpecs.middleLayer",
+            "Üst Katman": "productSpecs.topLayer",
+            "Kaymaz Taban": "productSpecs.nonSlipBase",
+            "Poliüretan (PU) Köpük": "productSpecs.puFoam",
+            "Poliüretan Köpük": "productSpecs.puFoam",
+            "Polyester": "productSpecs.polyester",
+            "Beden": "productSpecs.size",
+            "Renk": "productSpecs.color",
+        };
+
+        // 1. Try to match "Label : Value" pattern
+        // Matches "Top çapı : 22" or "Malzeme: Plastik"
+        const colonMatch = feature.match(/^([^:]+)\s*:\s*(.+)$/);
+
+        if (colonMatch) {
+            const label = colonMatch[1].trim(); // e.g., "Top çapı"
+            const value = colonMatch[2].trim(); // e.g., "22"
+
+            // If label exists in our map, translate it
+            if (termMap[label]) {
+                const translatedLabel = t(termMap[label]);
+
+                // Also try to translate the value if it's a known term
+                let translatedValue = value;
+                // Check if value is in map
+                if (termMap[value]) {
+                    translatedValue = t(termMap[value]);
+                }
+
+                return `${translatedLabel} : ${translatedValue}`;
+            }
+        }
+
+        // 2. Direct replacement for known phrases if strict match found
+        Object.keys(termMap).forEach(term => {
+            // If the feature IS exactly one of our terms
+            if (feature.trim() === term) {
+                translated = t(termMap[term]);
+            }
+            // If feature contains the term (be careful with partial matches)
+            else if (feature.includes(term)) {
+                // Only replace if we haven't already completely replaced it via colon match
+                // For now, let's just replace the term if found
+                // Regex to replace only whole words or specific phrases could be safer
+                translated = translated.replace(term, t(termMap[term]));
+            }
+        });
+
+        return translated;
+    };
+
     const getDiscountPercent = () => {
-        if (product?.originalPrice && product.originalPrice > product.price) {
-            return Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+        const original = getCurrentOriginalPrice();
+        const current = getCurrentPrice();
+        if (original && original > current) {
+            return Math.round(((original - current) / original) * 100);
         }
         return 0;
     };
@@ -368,14 +498,21 @@ export default function ProductDetailPage() {
                             {/* Price & Actions */}
                             <div className="space-y-6 py-2">
                                 <div className="flex items-end gap-4">
-                                    <p className="text-4xl font-bold text-primary font-body">{product.price.toFixed(2)} ₺</p>
-                                    {product.originalPrice && product.originalPrice > product.price && (
+                                    <p className="text-4xl font-bold text-primary font-body">{getCurrentPrice().toFixed(2)} ₺</p>
+                                    {getCurrentOriginalPrice() && getCurrentOriginalPrice()! > getCurrentPrice() && (
                                         <>
-                                            <p className="mb-1 text-lg text-gray-500 line-through font-body">{product.originalPrice.toFixed(2)} ₺</p>
+                                            <p className="mb-1 text-lg text-gray-500 line-through font-body">{getCurrentOriginalPrice()!.toFixed(2)} ₺</p>
                                             <span className="mb-2 rounded bg-red-500/20 px-2 py-0.5 text-xs font-bold text-red-500">-{discount}%</span>
                                         </>
                                     )}
                                 </div>
+                                {/* Shipping Badge */}
+                                {product.shippingIncluded && (
+                                    <div className="flex items-center gap-2 text-green-500 mt-2">
+                                        <span className="material-symbols-outlined text-lg">local_shipping</span>
+                                        <span className="text-sm font-medium">{t('product.shippingIncluded')}</span>
+                                    </div>
+                                )}
 
                                 {/* Specs Grid Mini */}
                                 <div className="grid grid-cols-2 gap-4 rounded-xl bg-surface-dark p-4 border border-white/10">
@@ -402,22 +539,30 @@ export default function ProductDetailPage() {
                                 </div>
 
                                 {/* Size Selector */}
-                                {product.sizes && product.sizes.length > 0 && (
+                                {getAvailableSizes().length > 1 && (
                                     <div>
                                         <label className="mb-2 block text-xs font-medium uppercase text-gray-500">{t('product.selectSize')}</label>
                                         <div className="flex flex-wrap gap-2">
-                                            {product.sizes.map((size) => (
-                                                <button
-                                                    key={size}
-                                                    onClick={() => setSelectedSize(size)}
-                                                    className={`px-4 py-2 rounded-lg border-2 text-sm font-bold transition-all ${selectedSize === size
-                                                        ? "bg-primary border-primary text-black"
-                                                        : "bg-surface-dark border-white/20 text-white hover:border-primary"
-                                                        }`}
-                                                >
-                                                    {size}
-                                                </button>
-                                            ))}
+                                            {getAvailableSizes().map((size) => {
+                                                const variant = product.sizeVariants?.find(v => v.size === size);
+                                                return (
+                                                    <button
+                                                        key={size}
+                                                        onClick={() => setSelectedSize(size)}
+                                                        className={`px-4 py-2 rounded-lg border-2 text-sm font-bold transition-all flex flex-col items-center ${selectedSize === size
+                                                            ? "bg-primary border-primary text-black"
+                                                            : "bg-surface-dark border-white/20 text-white hover:border-primary"
+                                                            }`}
+                                                    >
+                                                        <span>{size}</span>
+                                                        {variant && (
+                                                            <span className={`text-xs ${selectedSize === size ? "text-black/70" : "text-gray-400"}`}>
+                                                                {variant.price.toFixed(0)} ₺
+                                                            </span>
+                                                        )}
+                                                    </button>
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                 )}
@@ -492,14 +637,20 @@ export default function ProductDetailPage() {
                                         <span className="material-symbols-outlined transition group-open:rotate-180">expand_more</span>
                                     </summary>
                                     <div className="pt-3 text-sm leading-relaxed text-gray-400">
-                                        {product.features && product.features.length > 0 ? (
+                                        {getCurrentFeatures().length > 0 ? (
                                             <ul className="list-disc space-y-2 pl-4 marker:text-primary">
-                                                {product.features.map((feature, index) => (
-                                                    <li key={index}>{feature}</li>
+                                                {getCurrentFeatures().map((feature, index) => (
+                                                    <li key={index}>{translateFeature(feature)}</li>
                                                 ))}
                                             </ul>
                                         ) : (
                                             <p>{product.description || t('product.noDetails')}</p>
+                                        )}
+                                        {selectedSize && product.sizeVariants?.find(v => v.size === selectedSize)?.features && (
+                                            <p className="text-xs text-primary mt-3 flex items-center gap-1">
+                                                <span className="material-symbols-outlined text-sm">info</span>
+                                                {t('product.sizeSpecificFeatures').replace('{size}', selectedSize)}
+                                            </p>
                                         )}
                                     </div>
                                 </details>

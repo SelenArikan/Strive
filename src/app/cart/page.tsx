@@ -9,8 +9,8 @@ import { useLanguage } from "@/hooks/useLanguage";
 export default function CartPage() {
   const { items, removeFromCart, updateQuantity, totalItems, subtotal } = useCart();
   const { t } = useLanguage();
-  const tax = subtotal * 0.08; // 8% tax
-  const total = subtotal + tax;
+  // Tax removed as requested
+  const total = subtotal;
 
   return (
     <div className="relative flex min-h-screen w-full flex-col bg-slate-50 dark:bg-background-dark text-slate-900 dark:text-gray-100">
@@ -76,6 +76,12 @@ export default function CartPage() {
                         <p className="text-lg font-bold font-body">{item.price.toFixed(2)} ₺</p>
                         {item.originalPrice && (
                           <p className="text-xs text-gray-400 line-through font-body">{item.originalPrice.toFixed(2)} ₺</p>
+                        )}
+                        {item.shippingIncluded && (
+                          <div className="flex items-center gap-1 text-green-500 text-xs font-medium justify-end mt-1">
+                            <span className="material-symbols-outlined text-sm">local_shipping</span>
+                            <span>{t('product.shippingIncluded')}</span>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -150,10 +156,7 @@ export default function CartPage() {
                       <span className="text-gray-600 dark:text-gray-400 text-sm">{t('cart.shippingEstimate')}</span>
                       <span className="font-semibold text-primary text-sm">{t('cart.free')}</span>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-600 dark:text-gray-400 text-sm">{t('cart.taxEstimate')}</span>
-                      <span className="font-semibold font-body">{tax.toFixed(2)} ₺</span>
-                    </div>
+
 
                     {/* Discount Code Input */}
                     <div className="pt-2">
