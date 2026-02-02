@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/hooks/useLanguage";
 
 export default function FeaturesSection() {
@@ -76,6 +77,79 @@ export default function FeaturesSection() {
               </p>
             </div>
           ))}
+        </div>
+
+        {/* Certificates Section */}
+        <div className="mt-20 pt-16 border-t border-white/5">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="max-w-xl">
+              <h3 className="text-2xl font-bold text-white mb-2 text-center md:text-left">{t('about.certifiedQuality')}</h3>
+              <p className="text-gray-400 text-sm text-center md:text-left">{t('about.certifiedQualityDesc')}</p>
+            </div>
+
+            <div className="flex gap-4 overflow-x-auto pb-4 md:pb-0 scrollbar-hide justify-center md:justify-end w-full md:w-auto">
+              {/* Certificate 1 */}
+              <a
+                href="/Certification/TCT251117C004001-Etiket-STRIVE Silent Basketball-REACH 附录 17 PAHs 8 英文(1).pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-20 h-28 shrink-0 rounded-lg overflow-hidden border border-white/20 hover:border-primary hover:scale-105 transition-all duration-300 shadow-lg bg-white relative group"
+                title="REACH PAHs Certification"
+              >
+                <Image
+                  src="/Certification/thumbnails/cert1-reach-pahs.png"
+                  alt="REACH PAHs"
+                  fill
+                  className="object-cover group-hover:opacity-90 transition-opacity"
+                />
+              </a>
+              {/* Certificate 2 */}
+              <a
+                href="/Certification/TCT251117C004002-Etiket-STRIVE Silent Basketball-ROHS 2.0 10项 (1).pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-20 h-28 shrink-0 rounded-lg overflow-hidden border border-white/20 hover:border-primary hover:scale-105 transition-all duration-300 shadow-lg bg-white relative group"
+                title="ROHS 2.0 Certification"
+              >
+                <Image
+                  src="/Certification/thumbnails/cert2-rohs.png"
+                  alt="ROHS 2.0"
+                  fill
+                  className="object-cover group-hover:opacity-90 transition-opacity"
+                />
+              </a>
+              {/* Certificate 3 */}
+              <a
+                href="/Certification/TCT251117C004003-Etiket-STRIVE Silent Basketball-CPC 美国消费品认证.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-20 h-28 shrink-0 rounded-lg overflow-hidden border border-white/20 hover:border-primary hover:scale-105 transition-all duration-300 shadow-lg bg-white relative group"
+                title="CPC Certification"
+              >
+                <Image
+                  src="/Certification/thumbnails/cert3-cpc.png"
+                  alt="CPC"
+                  fill
+                  className="object-cover group-hover:opacity-90 transition-opacity"
+                />
+              </a>
+              {/* Certificate 4 */}
+              <a
+                href="/Certification/TCT251117C004004-Etiket-STRIVE Silent Basketball-ASTM F963-23 玩具测试 英文.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-20 h-28 shrink-0 rounded-lg overflow-hidden border border-white/20 hover:border-primary hover:scale-105 transition-all duration-300 shadow-lg bg-white relative group"
+                title="ASTM F963-23 Certification"
+              >
+                <Image
+                  src="/Certification/thumbnails/cert4-astm.png"
+                  alt="ASTM F963-23"
+                  fill
+                  className="object-cover group-hover:opacity-90 transition-opacity"
+                />
+              </a>
+            </div>
+          </div>
         </div>
 
         {/* Mobile "See technology" link */}
