@@ -87,8 +87,12 @@ export default function FeaturesSection() {
               <p className="text-gray-400 text-sm text-center md:text-left">{t('about.certifiedQualityDesc')}</p>
             </div>
 
-            <div className="flex gap-4 overflow-x-auto pb-4 md:pb-0 scrollbar-hide justify-center md:justify-end w-full md:w-auto">
-              {/* Certificate 1 */}
+            <div
+              className="flex gap-4 overflow-x-auto pb-4 md:pb-0 justify-center md:justify-end w-full md:w-auto [&::-webkit-scrollbar]:hidden"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+
+              {/* Certificate 1: REACH PAHs */}
               <a
                 href="/Certification/TCT251117C004001-Etiket-STRIVE Silent Basketball-REACH 附录 17 PAHs 8 英文(1).pdf"
                 target="_blank"
@@ -103,47 +107,47 @@ export default function FeaturesSection() {
                   className="object-cover group-hover:opacity-90 transition-opacity"
                 />
               </a>
-              {/* Certificate 2 */}
+              {/* Certificate 2: EN 71 */}
               <a
-                href="/Certification/TCT251117C004002-Etiket-STRIVE Silent Basketball-ROHS 2.0 10项 (1).pdf"
+                href="/Certification/TCT251117C004002-Etiket-STRIVE Silent Basketball-Size 7，Size 5-EN 71-1-2-3 (2024) 英文.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-20 h-28 shrink-0 rounded-lg overflow-hidden border border-white/20 hover:border-primary hover:scale-105 transition-all duration-300 shadow-lg bg-white relative group"
-                title="ROHS 2.0 Certification"
+                title="EN 71 Certification"
               >
                 <Image
-                  src="/Certification/thumbnails/cert2-rohs.png"
-                  alt="ROHS 2.0"
+                  src="/Certification/thumbnails/cert2-en71.png"
+                  alt="EN 71"
                   fill
                   className="object-cover group-hover:opacity-90 transition-opacity"
                 />
               </a>
-              {/* Certificate 3 */}
+              {/* Certificate 3: REACH Phthalates */}
               <a
-                href="/Certification/TCT251117C004003-Etiket-STRIVE Silent Basketball-CPC 美国消费品认证.pdf"
+                href="/Certification/TCT251117C004003-Etiket-STRIVE Silent Basketball-REACH 附录17 邻苯 英文(1).pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-20 h-28 shrink-0 rounded-lg overflow-hidden border border-white/20 hover:border-primary hover:scale-105 transition-all duration-300 shadow-lg bg-white relative group"
-                title="CPC Certification"
+                title="REACH Phthalates Certification"
               >
                 <Image
-                  src="/Certification/thumbnails/cert3-cpc.png"
-                  alt="CPC"
+                  src="/Certification/thumbnails/cert3-reach-phthalates.png"
+                  alt="REACH Phthalates"
                   fill
                   className="object-cover group-hover:opacity-90 transition-opacity"
                 />
               </a>
-              {/* Certificate 4 */}
+              {/* Certificate 4: CE */}
               <a
-                href="/Certification/TCT251117C004004-Etiket-STRIVE Silent Basketball-ASTM F963-23 玩具测试 英文.pdf"
+                href="/Certification/TCT251117C004002 CE 证书.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-20 h-28 shrink-0 rounded-lg overflow-hidden border border-white/20 hover:border-primary hover:scale-105 transition-all duration-300 shadow-lg bg-white relative group"
-                title="ASTM F963-23 Certification"
+                title="CE Certification"
               >
                 <Image
-                  src="/Certification/thumbnails/cert4-astm.png"
-                  alt="ASTM F963-23"
+                  src="/Certification/thumbnails/cert4-ce.png"
+                  alt="CE"
                   fill
                   className="object-cover group-hover:opacity-90 transition-opacity"
                 />
