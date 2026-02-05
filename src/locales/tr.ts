@@ -102,7 +102,7 @@ export const tr = {
     product: {
         productDetails: "Ürün Detayları",
         shippingReturns: "Kargo & İade",
-        customerReviews: "Müşteri Yorumları",
+
         verifiedBuyer: "Doğrulanmış Alıcı",
         quantity: "Adet",
         selectSize: "Beden Seçin",
@@ -114,7 +114,7 @@ export const tr = {
         status: "Durum",
         noDetails: "Ürün detayları mevcut değil.",
         shippingText: "Hızlı kargo ile gönderim yapılmaktadır. Ürün kullanılmamış ve orijinal ambalajında olması kaydıyla 14 gün içinde iade kabul edilmektedir.",
-        basedOnReviews: "215 değerlendirmeye göre",
+
         backToShop: "Mağazaya Dön",
         notFound: "Ürün Bulunamadı",
         notFoundDesc: "Aradığınız ürün mevcut değil.",

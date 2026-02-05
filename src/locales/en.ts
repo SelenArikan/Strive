@@ -102,7 +102,7 @@ export const en = {
     product: {
         productDetails: "Product Details",
         shippingReturns: "Shipping & Returns",
-        customerReviews: "Customer Reviews",
+
         verifiedBuyer: "Verified Buyer",
         quantity: "Quantity",
         selectSize: "Select Size",
@@ -114,7 +114,7 @@ export const en = {
         status: "Status",
         noDetails: "Product details not available.",
         shippingText: "Fast shipping available. Returns accepted within 14 days if product is unused and in original packaging.",
-        basedOnReviews: "Based on 215 reviews",
+
         backToShop: "Back to Shop",
         notFound: "Product Not Found",
         notFoundDesc: "The product you are looking for does not exist.",
