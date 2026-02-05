@@ -7,10 +7,8 @@ import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/hooks/useLanguage";
 
 export default function CartPage() {
-  const { items, removeFromCart, updateQuantity, totalItems, subtotal } = useCart();
+  const { items, removeFromCart, updateQuantity, totalItems, subtotal, totalShipping, total } = useCart();
   const { t } = useLanguage();
-  // Tax removed as requested
-  const total = subtotal;
 
   return (
     <div className="relative flex min-h-screen w-full flex-col bg-slate-50 dark:bg-background-dark text-slate-900 dark:text-gray-100">
@@ -77,10 +75,14 @@ export default function CartPage() {
                         {item.originalPrice && (
                           <p className="text-xs text-gray-400 line-through font-body">{item.originalPrice.toFixed(2)} ₺</p>
                         )}
-                        {item.shippingIncluded && (
+                        {item.shippingIncluded ? (
                           <div className="flex items-center gap-1 text-green-500 text-xs font-medium justify-end mt-1">
                             <span className="material-symbols-outlined text-sm">local_shipping</span>
                             <span>{t('product.shippingIncluded')}</span>
+                          </div>
+                        ) : (
+                          <div className="text-xs text-gray-400 mt-1">
+                            + {(item.shippingCost || 0).toFixed(2)} ₺ Kargo
                           </div>
                         )}
                       </div>
@@ -154,7 +156,9 @@ export default function CartPage() {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600 dark:text-gray-400 text-sm">{t('cart.shippingEstimate')}</span>
-                      <span className="font-semibold text-primary text-sm">{t('cart.free')}</span>
+                      <span className={`font-semibold text-sm ${totalShipping > 0 ? "font-body" : "text-primary"}`}>
+                        {totalShipping > 0 ? `${totalShipping.toFixed(2)} ₺` : t('cart.free')}
+                      </span>
                     </div>
 
 
@@ -209,6 +213,12 @@ export default function CartPage() {
                         message += `   Size: ${item.size || "Std"} | Adet: ${item.quantity}\n`;
                         message += `   Fiyat: ${item.price.toFixed(2)} ₺\n\n`;
                       });
+
+                      if (totalShipping > 0) {
+                        message += `*Kargo: ${totalShipping.toFixed(2)} ₺*\n`;
+                      } else {
+                        message += `*Kargo: Ücretsiz*\n`;
+                      }
 
                       message += `*Toplam Tutar: ${total.toFixed(2)} ₺* (Vergi dahil)\n\n`;
                       message += `Siparişimi onaylamak istiyorum.`;

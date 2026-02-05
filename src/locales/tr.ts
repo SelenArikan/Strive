@@ -130,8 +130,27 @@ export const tr = {
             time1w: "1 hafta önce",
             time2w: "2 hafta önce",
         },
-        shippingIncluded: "Kargo Dahil",
+        reviewsTitle: "Değerlendirmeler",
+        basedOnReviews: "215 değerlendirmeye göre",
+        customerReviews: "Müşteri Yorumları",
+        writeReview: "Değerlendirme Yap",
+        noReviews: "Henüz değerlendirme yok. İlk yorumu siz yapın!",
+        yourName: "Adınız",
+        yourComment: "Yorumunuz",
+        submitReview: "Gönder",
+        ratingLabel: "Puan",
         sizeSpecificFeatures: "{size} bedeni için özel özellikler gösteriliyor",
+        // Common product specifications
+        mainMaterial: "Ana Malzeme",
+        polyurethane: "Poliüretan",
+        ageWarning: "3 Yaş ve üzeri",
+        smallPartsWarning: "Küçük parçalar içerir.",
+        chokingHazard: "Boğulma tehlikesi vardır.",
+        // Mat specific
+        layerInfo: "Katman Bilgisi",
+        layer1: "1. Katman: Kaymaz Taban",
+        layer2: "2. Katman: Poliüretan Sünger",
+        layer3: "3. Katman: Polyester",
     },
     productSpecs: {
         // Ball specifications

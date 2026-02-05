@@ -34,6 +34,7 @@ interface Product {
     sizeVariants?: SizeVariant[];
     bundleItems?: BundleItem[];
     shippingIncluded?: boolean;
+    shippingCost?: number;
     rating: number;
     description?: string;
     features?: string[];
@@ -66,6 +67,7 @@ export default function AdminDashboard() {
         sizeVariants: [] as SizeVariant[],
         bundleItems: [] as BundleItem[],
         shippingIncluded: false,
+        shippingCost: 0,
         rating: 4.5,
         description: "",
         features: "",
@@ -131,6 +133,7 @@ export default function AdminDashboard() {
             sizeVariants: [],
             bundleItems: [],
             shippingIncluded: false,
+            shippingCost: 0,
             rating: 4.5,
             description: "",
             features: "",
@@ -155,6 +158,7 @@ export default function AdminDashboard() {
             sizeVariants: product.sizeVariants || [],
             bundleItems: product.bundleItems || [],
             shippingIncluded: product.shippingIncluded || false,
+            shippingCost: product.shippingCost || 0,
             rating: product.rating || 4.5,
             description: product.description || "",
             features: product.features?.join(", ") || "",
@@ -239,6 +243,7 @@ export default function AdminDashboard() {
             sizeVariants: formData.sizeVariants.length > 0 ? formData.sizeVariants : undefined,
             bundleItems: formData.bundleItems.length > 0 ? formData.bundleItems : undefined,
             shippingIncluded: formData.shippingIncluded,
+            shippingCost: Number(formData.shippingCost),
             rating: formData.rating,
             description: formData.description || undefined,
             features: formData.features ? formData.features.split(",").map((f) => f.trim()) : undefined,
@@ -887,6 +892,30 @@ export default function AdminDashboard() {
                                             </span>
                                         </label>
                                     </div>
+
+                                    {/* Shipping Price Field (Only if shipping NOT included) */}
+                                    {!formData.shippingIncluded && (
+                                        <div className="col-span-2">
+                                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                                                Kargo Ücreti (₺)
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={formData.shippingCost}
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    if (/^\d*\.?\d*$/.test(val)) {
+                                                        setFormData({ ...formData, shippingCost: val as any });
+                                                    }
+                                                }}
+                                                onBlur={(e) => {
+                                                    setFormData({ ...formData, shippingCost: Number(e.target.value) });
+                                                }}
+                                                className="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary"
+                                                placeholder="0.00"
+                                            />
+                                        </div>
+                                    )}
 
                                     {/* Description */}
                                     <div className="col-span-2">

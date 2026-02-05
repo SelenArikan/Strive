@@ -32,6 +32,7 @@ interface Product {
   image: string;
   inStock: boolean;
   createdAt?: string;
+  reviews?: any[];
 }
 
 const categoryFilters = [
@@ -508,8 +509,10 @@ function CatalogContent() {
                           )}
                         </div>
                         <div className="flex items-center gap-1 text-xs text-amber-400">
-                          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                          <span className="font-medium text-slate-500">({product.rating})</span>
+                          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: (product.reviews?.length ? product.rating : 0) > 0 ? "'FILL' 1" : "'FILL' 0" }}>star</span>
+                          <span className="font-medium text-slate-500">
+                            {(product.reviews?.length ? product.rating : 0).toFixed(1)} ({product.reviews?.length || 0})
+                          </span>
                         </div>
                       </div>
                       {/* Shipping Badge */}

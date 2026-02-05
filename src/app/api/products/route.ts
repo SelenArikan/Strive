@@ -24,6 +24,8 @@ interface Product {
     image: string;
     media?: MediaItem[];
     inStock: boolean;
+    shippingIncluded?: boolean;
+    shippingCost?: number;
     createdAt: string;
 }
 

@@ -12,6 +12,7 @@ export interface CartItem {
   image: string;
   size?: string;
   shippingIncluded?: boolean;
+  shippingCost?: number;
 }
 
 interface CartContextType {
@@ -22,6 +23,8 @@ interface CartContextType {
   clearCart: () => void;
   totalItems: number;
   subtotal: number;
+  totalShipping: number;
+  total: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -74,6 +77,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+  // Calculate total shipping cost
+  const totalShipping = items.reduce((sum, item) => {
+    if (item.shippingIncluded) return sum;
+    return sum + (item.shippingCost || 0) * item.quantity;
+  }, 0);
+
+  const total = subtotal + totalShipping;
+
   return (
     <CartContext.Provider
       value={{
@@ -84,6 +95,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         clearCart,
         totalItems,
         subtotal,
+        totalShipping,
+        total,
       }}
     >
       {children}

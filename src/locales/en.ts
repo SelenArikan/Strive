@@ -130,8 +130,28 @@ export const en = {
             time1w: "1 week ago",
             time2w: "2 weeks ago",
         },
+        reviewsTitle: "Customer Reviews",
+        basedOnReviews: "Based on 215 reviews",
+        customerReviews: "Customer Reviews",
+        writeReview: "Write a Review",
+        noReviews: "No reviews yet. Be the first to review!",
+        yourName: "Your Name",
+        yourComment: "Your Comment",
+        submitReview: "Submit",
+        ratingLabel: "Rating",
         shippingIncluded: "Shipping Included",
         sizeSpecificFeatures: "Showing features specific to {size}",
+        // Common product specifications
+        mainMaterial: "Main Material",
+        polyurethane: "Polyurethane",
+        ageWarning: "Ages 3 and up",
+        smallPartsWarning: "Contains small parts.",
+        chokingHazard: "Choking hazard.",
+        // Mat specific
+        layerInfo: "Layer Information",
+        layer1: "1st Layer: Non-slip Base",
+        layer2: "2nd Layer: Polyurethane Sponge",
+        layer3: "3rd Layer: Polyester",
     },
     productSpecs: {
         // Ball specifications

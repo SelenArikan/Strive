@@ -14,6 +14,14 @@ interface MediaItem {
     url: string;
 }
 
+interface Review {
+    id: string;
+    userName: string;
+    rating: number;
+    comment: string;
+    date: string;
+}
+
 interface SizeVariant {
     size: string;
     price: number;
@@ -32,9 +40,11 @@ interface Product {
     originalPrice?: number | null;
     sizeVariants?: SizeVariant[];
     shippingIncluded?: boolean;
+    shippingCost?: number;
     rating: number;
     description?: string;
     features?: string[];
+    reviews?: Review[];
     image: string;
     media?: MediaItem[];
     inStock: boolean;
@@ -55,6 +65,23 @@ export default function ProductDetailPage() {
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
     const [addedToCart, setAddedToCart] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    // Review State
+    const [reviewForm, setReviewForm] = useState({ userName: "", rating: 5, comment: "" });
+    const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+
+    // Calculate rating stats
+    const ratingCounts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0, total: 0 };
+    if (product?.reviews) {
+        product.reviews.forEach((r: any) => {
+            const rating = Math.floor(r.rating);
+            if (rating >= 1 && rating <= 5) {
+                // @ts-ignore
+                ratingCounts[rating] = (ratingCounts[rating] || 0) + 1;
+            }
+        });
+        ratingCounts.total = product.reviews.length;
+    }
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -101,6 +128,7 @@ export default function ProductDetailPage() {
                 image: product.image,
                 size: sizeToAdd,
                 shippingIncluded: product.shippingIncluded,
+                shippingCost: product.shippingCost,
             });
         }
         setAddedToCart(true);
@@ -194,6 +222,20 @@ export default function ProductDetailPage() {
             "Polyester": "productSpecs.polyester",
             "Beden": "productSpecs.size",
             "Renk": "productSpecs.color",
+            // Common product specifications
+            "Ana Malzeme": "product.mainMaterial",
+            "Poliüretan": "product.polyurethane",
+            "3 Yaş ve üzeri": "product.ageWarning",
+            "Küçük parçalar içerir.": "product.smallPartsWarning",
+            "Boğulma tehlikesi vardır.": "product.chokingHazard",
+            // Mat layer information
+            "Katman Bilgisi": "product.layerInfo",
+            "1. Katman: Kaymaz Taban": "product.layer1",
+            "1. Katman Kaymaz Taban": "product.layer1",
+            "orta katman poliüretan Sünger": "product.layer2",
+            "üst katman polyester diye ekleyelim": "product.layer3",
+            "2. Katman: Poliüretan Sünger": "product.layer2",
+            "3. Katman: Polyester": "product.layer3",
         };
 
         // 1. Try to match "Label : Value" pattern
@@ -248,6 +290,8 @@ export default function ProductDetailPage() {
 
     // Combine main image with media array
     const getAllMedia = (): MediaItem[] => {
+
+
         if (!product) return [];
         const mediaList: MediaItem[] = [];
 
@@ -265,6 +309,38 @@ export default function ProductDetailPage() {
         }
 
         return mediaList;
+    };
+
+    const handleSubmitReview = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!product) return;
+
+        setIsSubmittingReview(true);
+        try {
+            const res = await fetch("/api/products/review", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    productId: product.id,
+                    ...reviewForm
+                }),
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                setProduct(data.product);
+                setReviewForm({ userName: "", rating: 5, comment: "" });
+                // Optional: Show success toast
+            } else {
+                alert("Yorum eklenirken bir hata oluştu: " + data.error);
+            }
+        } catch (error) {
+            console.error("Error submitting review:", error);
+            alert("Bir hata oluştu.");
+        } finally {
+            setIsSubmittingReview(false);
+        }
     };
 
     if (isLoading) {
@@ -293,6 +369,7 @@ export default function ProductDetailPage() {
 
     const allMedia = getAllMedia();
     const discount = getDiscountPercent();
+    const displayRating = product.reviews && product.reviews.length > 0 ? product.rating : 0;
 
     return (
         <div className="min-h-screen bg-background-dark">
@@ -483,13 +560,13 @@ export default function ProductDetailPage() {
                                             <span
                                                 key={i}
                                                 className="material-symbols-outlined text-[20px]"
-                                                style={i < Math.floor(product.rating) ? { fontVariationSettings: "'FILL' 1" } : undefined}
+                                                style={i < Math.floor(displayRating) ? { fontVariationSettings: "'FILL' 1" } : undefined}
                                             >
-                                                {i < Math.floor(product.rating) ? "star" : i < product.rating ? "star_half" : "star_border"}
+                                                {i < Math.floor(displayRating) ? "star" : i < displayRating ? "star_half" : "star_border"}
                                             </span>
                                         ))}
                                     </div>
-                                    <span className="text-sm font-medium text-gray-400">{product.rating.toFixed(1)}</span>
+                                    <span className="text-sm font-medium text-gray-400">{displayRating.toFixed(1)}</span>
                                 </div>
                                 <h1 className="text-4xl font-black uppercase leading-tight tracking-tight text-white md:text-5xl">{product.name}</h1>
                                 <p className="text-lg font-light text-gray-300">{product.description || product.category}</p>
@@ -655,6 +732,105 @@ export default function ProductDetailPage() {
                                     </div>
                                 </details>
 
+                                {/* Reviews Section */}
+                                <div className="hidden">
+                                    <h3 className="text-xl font-bold text-white mb-8 flex items-center gap-3">
+                                        <span className="material-symbols-outlined text-primary">rate_review</span>
+                                        {t('product.reviewsTitle')}
+                                        <span className="text-gray-500 text-lg font-normal">({product.reviews?.length || 0})</span>
+                                    </h3>
+                                    <div>
+                                        {/* Reviews List */}
+                                        <div className="space-y-6 mb-8">
+                                            {product.reviews && product.reviews.length > 0 ? (
+                                                product.reviews.map((review) => (
+                                                    <div key={review.id} className="bg-white/5 rounded-xl p-4">
+                                                        <div className="flex justify-between items-start mb-2">
+                                                            <div>
+                                                                <div className="font-bold text-white">{review.userName}</div>
+                                                                <div className="flex text-yellow-400 text-sm">
+                                                                    {[...Array(5)].map((_, i) => (
+                                                                        <span key={i} className="material-symbols-outlined text-[16px] w-[16px] overflow-hidden">
+                                                                            {i < review.rating ? "star" : "star_border"}
+                                                                        </span>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                            <div className="text-xs text-gray-500">
+                                                                {new Date(review.date).toLocaleDateString("tr-TR")}
+                                                            </div>
+                                                        </div>
+                                                        <p className="text-gray-300 text-sm">{review.comment}</p>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p className="text-gray-500 text-sm italic">{t('product.noReviews')}</p>
+                                            )}
+                                        </div>
+
+                                        {/* Add Review Form */}
+                                        <div className="bg-surface-dark border border-white/10 rounded-xl p-5">
+                                            <h4 className="font-bold text-white mb-4">{t('product.writeReview')}</h4>
+                                            <form onSubmit={handleSubmitReview} className="space-y-4">
+                                                <div>
+                                                    <label className="block text-xs font-bold uppercase text-gray-500 mb-1">{t('product.ratingLabel')}</label>
+                                                    <div className="flex gap-2">
+                                                        {[1, 2, 3, 4, 5].map((star) => (
+                                                            <button
+                                                                key={star}
+                                                                type="button"
+                                                                onClick={() => setReviewForm({ ...reviewForm, rating: star })}
+                                                                className={`material-symbols-outlined text-2xl transition hover:scale-110 ${star <= reviewForm.rating ? "text-yellow-400 fill-current" : "text-gray-600"
+                                                                    }`}
+                                                            >
+                                                                star
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label className="block text-xs font-bold uppercase text-gray-500 mb-1">{t('product.yourName')}</label>
+                                                    <input
+                                                        type="text"
+                                                        required
+                                                        value={reviewForm.userName}
+                                                        onChange={(e) => setReviewForm({ ...reviewForm, userName: e.target.value })}
+                                                        className="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary text-sm"
+                                                        placeholder={t('product.yourName')}
+                                                    />
+                                                </div>
+
+                                                <div>
+                                                    <label className="block text-xs font-bold uppercase text-gray-500 mb-1">{t('product.yourComment')}</label>
+                                                    <textarea
+                                                        required
+                                                        value={reviewForm.comment}
+                                                        onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
+                                                        className="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary text-sm h-24 resize-none"
+                                                        placeholder={t('product.yourComment') + "..."}
+                                                    />
+                                                </div>
+
+                                                <button
+                                                    type="submit"
+                                                    disabled={isSubmittingReview}
+                                                    className="w-full py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg transition disabled:opacity-50 flex items-center justify-center gap-2"
+                                                >
+                                                    {isSubmittingReview ? (
+                                                        <span className="material-symbols-outlined animate-spin">progress_activity</span>
+                                                    ) : (
+                                                        <>
+                                                            <span className="material-symbols-outlined">send</span>
+                                                            {t('product.submitReview')}
+                                                        </>
+                                                    )}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 {/* Shipping & Returns */}
                                 <details className="group py-4">
                                     <summary className="flex cursor-pointer items-center justify-between font-bold text-white marker:content-none hover:text-primary">
@@ -671,117 +847,136 @@ export default function ProductDetailPage() {
 
                     {/* Reviews Section */}
                     <div className="mt-24 border-t border-white/10 pt-12">
-                        <h3 className="mb-8 text-2xl font-black uppercase text-white">{t('product.customerReviews')}</h3>
+                        <h3 className="mb-8 text-2xl font-black uppercase text-white">{t('product.reviewsTitle')}</h3>
                         <div className="flex flex-col gap-8 lg:flex-row lg:gap-16">
                             {/* Summary */}
                             <div className="w-full lg:w-1/3">
                                 <div className="rounded-2xl bg-surface-dark p-8 border border-white/10">
                                     <div className="flex items-end gap-3 mb-2">
-                                        <span className="text-6xl font-black text-white">{product.rating.toFixed(1)}</span>
+                                        <span className="text-6xl font-black text-white">{displayRating.toFixed(1)}</span>
                                         <div className="mb-2 flex text-primary">
                                             {[...Array(5)].map((_, i) => (
-                                                <span key={i} className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
-                                                    {i < Math.floor(product.rating) ? "star" : i < product.rating ? "star_half" : "star_border"}
+                                                <span key={i} className="material-symbols-outlined" style={{ fontVariationSettings: i < displayRating ? "'FILL' 1" : "'FILL' 0" }}>
+                                                    {i < Math.floor(displayRating) ? "star" : i < displayRating ? "star_half" : "star_border"}
                                                 </span>
                                             ))}
                                         </div>
                                     </div>
-                                    <p className="text-gray-400 mb-6">{t('product.basedOnReviews')}</p>
+                                    <p className="text-gray-400 mb-6">{t('product.basedOnReviews').replace("215", ratingCounts.total.toString())}</p>
                                     <div className="space-y-3">
-                                        {[
-                                            { stars: 5, percent: 78 },
-                                            { stars: 4, percent: 15 },
-                                            { stars: 3, percent: 4 },
-                                            { stars: 2, percent: 1 },
-                                            { stars: 1, percent: 2 },
-                                        ].map((item) => (
-                                            <div key={item.stars} className="grid grid-cols-[20px_1fr_40px] items-center gap-3 text-sm">
-                                                <span className="text-white">{item.stars}</span>
-                                                <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
-                                                    <div className="h-full rounded-full bg-primary" style={{ width: `${item.percent}%` }}></div>
+                                        {[5, 4, 3, 2, 1].map((star) => {
+                                            // @ts-ignore
+                                            const count = ratingCounts[star] || 0;
+                                            const percent = ratingCounts.total > 0 ? Math.round((count / ratingCounts.total) * 100) : 0;
+                                            return (
+                                                <div key={star} className="grid grid-cols-[20px_1fr_40px] items-center gap-3 text-sm">
+                                                    <span className="text-white">{star}</span>
+                                                    <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
+                                                        <div className="h-full rounded-full bg-primary" style={{ width: `${percent}%` }}></div>
+                                                    </div>
+                                                    <span className="text-right text-gray-400">{percent}%</span>
                                                 </div>
-                                                <span className="text-right text-gray-400">{item.percent}%</span>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Reviews List and Form */}
+                            <div className="flex-1 space-y-8">
+                                <div className="space-y-6">
+                                    {product.reviews && product.reviews.length > 0 ? (
+                                        product.reviews.map((review) => (
+                                            <div key={review.id} className="border-b border-white/10 pb-6">
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <h4 className="font-bold text-white">{review.userName}</h4>
+                                                    <span className="text-sm text-gray-500">{new Date(review.date).toLocaleDateString("tr-TR")}</span>
+                                                </div>
+                                                <div className="flex text-primary mb-3 text-sm">
+                                                    {[...Array(5)].map((_, i) => (
+                                                        <span key={i} className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: i < review.rating ? "'FILL' 1" : "'FILL' 0" }}>
+                                                            star
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                                <p className="text-gray-400 leading-relaxed">{review.comment}</p>
+                                                <div className="mt-4 flex items-center gap-2">
+                                                    <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
+                                                        {review.userName.charAt(0).toUpperCase()}
+                                                    </div>
+                                                    <span className="text-sm font-medium text-gray-300">{review.userName}</span>
+                                                </div>
                                             </div>
-                                        ))}
-                                    </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-gray-500 text-sm italic">{t('product.noReviews')}</p>
+                                    )}
+                                </div>
+
+                                {/* Add Review Form */}
+                                <div className="bg-surface-dark border border-white/10 rounded-xl p-8 mt-8">
+                                    <h4 className="text-xl font-bold text-white mb-6">{t('product.writeReview')}</h4>
+                                    <form onSubmit={handleSubmitReview} className="space-y-6">
+                                        <div>
+                                            <label className="block text-sm font-bold uppercase text-gray-400 mb-2">{t('product.ratingLabel')}</label>
+                                            <div className="flex gap-2">
+                                                {[1, 2, 3, 4, 5].map((star) => (
+                                                    <button
+                                                        key={star}
+                                                        type="button"
+                                                        onClick={() => setReviewForm({ ...reviewForm, rating: star })}
+                                                        className={`material-symbols-outlined text-3xl transition hover:scale-110 ${star <= reviewForm.rating ? "text-primary fill-current" : "text-gray-600"}`}
+                                                        style={{ fontVariationSettings: star <= reviewForm.rating ? "'FILL' 1" : "'FILL' 0" }}
+                                                    >
+                                                        star
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-bold uppercase text-gray-400 mb-2">{t('product.yourName')}</label>
+                                            <input
+                                                type="text"
+                                                required
+                                                value={reviewForm.userName}
+                                                onChange={(e) => setReviewForm({ ...reviewForm, userName: e.target.value })}
+                                                className="w-full bg-background-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition"
+                                                placeholder={t('product.yourName')}
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-bold uppercase text-gray-400 mb-2">{t('product.yourComment')}</label>
+                                            <textarea
+                                                required
+                                                value={reviewForm.comment}
+                                                onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
+                                                className="w-full bg-background-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition h-32 resize-none"
+                                                placeholder={t('product.yourComment') + "..."}
+                                            />
+                                        </div>
+
+                                        <button
+                                            type="submit"
+                                            disabled={isSubmittingReview}
+                                            className="w-full py-4 bg-primary hover:bg-primary-light text-black font-bold rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2 uppercase tracking-wide"
+                                        >
+                                            {isSubmittingReview ? (
+                                                <span className="material-symbols-outlined animate-spin">progress_activity</span>
+                                            ) : (
+                                                <>
+                                                    <span className="material-symbols-outlined">send</span>
+                                                    {t('product.submitReview')}
+                                                </>
+                                            )}
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
 
-                            {/* Review Cards */}
-                            <div className="flex-1 space-y-6">
-                                {/* Review 1 */}
-                                <div className="border-b border-white/10 pb-6">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <h4 className="font-bold text-white">{t('product.reviews.r1t')}</h4>
-                                        <span className="text-sm text-gray-500">{t('product.reviews.time2d')}</span>
-                                    </div>
-                                    <div className="flex text-primary mb-3 text-sm">
-                                        {[...Array(5)].map((_, i) => (
-                                            <span key={i} className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                                        ))}
-                                    </div>
-                                    <p className="text-gray-400 leading-relaxed">
-                                        {t('product.reviews.r1d')}
-                                    </p>
-                                    <div className="mt-4 flex items-center gap-2">
-                                        <div className="h-6 w-6 rounded-full bg-gray-600 flex items-center justify-center text-xs font-bold text-white">M</div>
-                                        <span className="text-sm font-medium text-gray-300">Mehmet K.</span>
-                                        <span className="ml-2 flex items-center gap-1 text-xs text-primary">
-                                            <span className="material-symbols-outlined text-[14px]">check_circle</span>
-                                            {t('product.verifiedBuyer')}
-                                        </span>
-                                    </div>
-                                </div>
 
-                                {/* Review 2 */}
-                                <div className="border-b border-white/10 pb-6">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <h4 className="font-bold text-white">{t('product.reviews.r2t')}</h4>
-                                        <span className="text-sm text-gray-500">{t('product.reviews.time1w')}</span>
-                                    </div>
-                                    <div className="flex text-primary mb-3 text-sm">
-                                        {[...Array(4)].map((_, i) => (
-                                            <span key={i} className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                                        ))}
-                                        <span className="material-symbols-outlined text-[16px]">star_border</span>
-                                    </div>
-                                    <p className="text-gray-400 leading-relaxed">
-                                        {t('product.reviews.r2d')}
-                                    </p>
-                                    <div className="mt-4 flex items-center gap-2">
-                                        <div className="h-6 w-6 rounded-full bg-gray-700 flex items-center justify-center text-xs font-bold text-white">A</div>
-                                        <span className="text-sm font-medium text-gray-300">Ali V.</span>
-                                        <span className="ml-2 flex items-center gap-1 text-xs text-primary">
-                                            <span className="material-symbols-outlined text-[14px]">check_circle</span>
-                                            {t('product.verifiedBuyer')}
-                                        </span>
-                                    </div>
-                                </div>
 
-                                {/* Review 3 */}
-                                <div className="pb-6">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <h4 className="font-bold text-white">{t('product.reviews.r3t')}</h4>
-                                        <span className="text-sm text-gray-500">{t('product.reviews.time2w')}</span>
-                                    </div>
-                                    <div className="flex text-primary mb-3 text-sm">
-                                        {[...Array(5)].map((_, i) => (
-                                            <span key={i} className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                                        ))}
-                                    </div>
-                                    <p className="text-gray-400 leading-relaxed">
-                                        {t('product.reviews.r3d')}
-                                    </p>
-                                    <div className="mt-4 flex items-center gap-2">
-                                        <div className="h-6 w-6 rounded-full bg-primary/30 flex items-center justify-center text-xs font-bold text-primary">E</div>
-                                        <span className="text-sm font-medium text-gray-300">Emre T.</span>
-                                        <span className="ml-2 flex items-center gap-1 text-xs text-primary">
-                                            <span className="material-symbols-outlined text-[14px]">check_circle</span>
-                                            Doğrulanmış Alıcı
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

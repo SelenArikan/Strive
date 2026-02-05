@@ -5,26 +5,26 @@
       "name": "Strive Ball + Mat",
       "mainCategory": "Antrenman Ekipmanları",
       "category": "Home Training",
-      "size": "140cmx 80cm + Size 5, 140cmx 80cm + Size 7",
+      "size": "Size 5 + 140cm x 80cm, Size 7 + 140cm x 80cm",
       "courtType": "",
       "price": 3350,
       "originalPrice": null,
       "sizeVariants": [
         {
-          "size": "140cmx 80cm + Size 5",
+          "size": "Size 5 + 140cm x 80cm",
           "price": 3350,
           "features": [
-            "Top çapı :  22",
-            "5 cm",
+            "Top çapı :  22.5 cm",
             "Malzeme : Poliüretan (PU) Köpük",
-            "3 katman  -",
+            "3 katman",
             "1. Katman Kaymaz Taban",
             "orta katman poliüretan Sünger",
-            "üst katman polyester diye ekleyelim"
+            "üst katman polyester diye ekleyelim",
+            "CE Certificate of Compliance / Uygunluk Belgeli"
           ]
         },
         {
-          "size": "140cmx 80cm + Size 7",
+          "size": "Size 7 + 140cm x 80cm",
           "price": 3400,
           "features": [
             "Top çapı :  24cm",
@@ -32,13 +32,14 @@
             "3 katman",
             "1. Katman Kaymaz Taban",
             "orta katman poliüretan Sünger",
-            "üst katman polyester diye ekleyelim"
+            "üst katman polyester diye ekleyelim",
+            "CE Certificate of Compliance / Uygunluk Belgeli"
           ]
         }
       ],
-      "shippingIncluded": true,
-      "rating": 4.5,
-      "description": "-Ana Malzeme Poliüretan \n– 3 Yaş ve üzeri \n– Küçük parçalar içerir. \n– Boğulma tehlikesi vardır. \n",
+      "shippingIncluded": false,
+      "shippingCost": 750,
+      "rating": 3.5,
       "image": "/uploads/product_1770040197097_quv51n.jpg",
       "media": [
         {
@@ -55,11 +56,27 @@
         }
       ],
       "inStock": true,
-      "createdAt": "2026-02-02T13:54:02.713Z"
+      "createdAt": "2026-02-02T13:54:02.713Z",
+      "reviews": [
+        {
+          "id": "1770299135941",
+          "userName": "Fuat Dilek",
+          "rating": 4,
+          "comment": "Hızlı kargo",
+          "date": "2026-02-05T13:45:35.941Z"
+        },
+        {
+          "id": "1770298382879",
+          "userName": "Selen Arıkan",
+          "rating": 3,
+          "comment": "Çok iyiydi",
+          "date": "2026-02-05T13:33:02.879Z"
+        }
+      ]
     },
     {
       "id": 1768461859858,
-      "name": "Strive Ball No.5",
+      "name": "Strive Ball",
       "mainCategory": "Basketbol Topu",
       "category": "Basketball",
       "size": "Size 5, Size 7",
@@ -68,21 +85,32 @@
       "originalPrice": null,
       "sizeVariants": [
         {
-          "size": "Size 5",
-          "price": 2400
+          "size": "Size 7",
+          "price": 2450,
+          "features": [
+            "24  cm",
+            "- Malzeme : Poliüretan (PU) Köpük",
+            "CE Certificate of Compliance / Uygunluk Belgeli"
+          ]
         },
         {
-          "size": "Size 7",
-          "price": 2450
+          "size": "Size 5",
+          "price": 2400,
+          "features": [
+            "22.5 cm",
+            "- Malzeme : Poliüretan (PU) Köpük",
+            "CE Certificate of Compliance / Uygunluk Belgeli"
+          ]
         }
       ],
-      "shippingIncluded": true,
+      "shippingIncluded": false,
+      "shippingCost": 450,
       "rating": 4.5,
-      "description": "-Ana Malzeme Poliüretan \n– 3 Yaş ve üzeri \n– Küçük parçalar içerir. \n– Boğulma tehlikesi vardır. \n\nCE Certificate of Compliance / Uygunluk Belgeli ",
       "features": [
-        "Top çapı :  22",
-        "5 cm",
-        "Malzeme :Poliüretan (PU) Köpük"
+        "Ana Malzeme Poliüretan",
+        "3 Yaş ve üzeri",
+        "Küçük parçalar içerir.",
+        "Boğulma tehlikesi vardır."
       ],
       "image": "/uploads/product_1768461646681_603uij.png",
       "media": [
@@ -99,59 +127,16 @@
       "createdAt": "2026-01-15T07:24:19.858Z"
     },
     {
-      "id": 1768461973124,
-      "name": "Strive Ball No.7",
-      "mainCategory": "Basketbol Topu",
-      "category": "Basketball",
-      "size": "Size 5, Size 7",
-      "courtType": "Homedoor",
-      "price": 2450,
-      "originalPrice": null,
-      "sizeVariants": [
-        {
-          "size": "Size 5",
-          "price": 2400
-        },
-        {
-          "size": "Size 7",
-          "price": 2450
-        }
-      ],
-      "shippingIncluded": true,
-      "rating": 4.5,
-      "description": "-Ana Malzeme Poliüretan \n– 3 Yaş ve üzeri \n– Küçük parçalar içerir. \n– Boğulma tehlikesi vardır. \n\nCE Certificate of Compliance / Uygunluk Belgeli \nCE Certificate of Compliance / Uygunluk Belgeli ",
-      "features": [
-        "Top çapı : 24 cm",
-        "Malzeme : Poliüretan (PU) Köpük"
-      ],
-      "image": "/uploads/product_1768461890461_ospxfo.png",
-      "media": [
-        {
-          "type": "image",
-          "url": "/uploads/product_1768461890461_ospxfo.png"
-        },
-        {
-          "type": "image",
-          "url": "/uploads/product_1768461894359_h07dfm.jpg"
-        },
-        {
-          "type": "video",
-          "url": "/uploads/product_1768461917634_irfdsh.mp4"
-        }
-      ],
-      "inStock": true,
-      "createdAt": "2026-01-15T07:26:13.124Z"
-    },
-    {
       "id": 1768462124443,
       "name": "Basket Mat",
       "mainCategory": "Mat",
       "category": "Mat",
-      "size": "1400x800",
+      "size": "140cm x 80cm",
       "courtType": "Homedoor",
       "price": 950,
       "originalPrice": null,
-      "shippingIncluded": true,
+      "shippingIncluded": false,
+      "shippingCost": 450,
       "rating": 4.5,
       "features": [
         "3 katman",
@@ -159,15 +144,15 @@
         "orta katman poliüretan Sünger",
         "üst katman polyester diye ekleyelim"
       ],
-      "image": "/uploads/product_1768462084257_25mfvc.jpg",
+      "image": "/uploads/product_1770300246898_n8ui5i.jpeg",
       "media": [
         {
           "type": "image",
-          "url": "/uploads/product_1768462084257_25mfvc.jpg"
+          "url": "/uploads/product_1770300246898_n8ui5i.jpeg"
         },
         {
           "type": "image",
-          "url": "/uploads/product_1768462094760_m1epdq.jpg"
+          "url": "/uploads/product_1770300275192_bm7y9u.jpeg"
         }
       ],
       "inStock": true,
