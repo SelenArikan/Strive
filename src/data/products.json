@@ -1,6 +1,80 @@
 {
   "products": [
     {
+      "id": 1770328144791,
+      "name": "Strive Ball No.5",
+      "mainCategory": "Basketbol Topu",
+      "category": "Home Training",
+      "size": "Size 5",
+      "courtType": "",
+      "price": 2400,
+      "originalPrice": null,
+      "shippingIncluded": false,
+      "shippingCost": 450,
+      "rating": 4.5,
+      "features": [
+        "Top çapı : 22.5 cm",
+        "Malzeme : Poliüretan (PU) Köpük",
+        "CE Certificate of Compliance / Uygunluk Belgeli",
+        "Ana Malzeme Poliüretan",
+        "3 Yaş ve üzeri",
+        "Küçük parçalar içerir.",
+        "Boğulma tehlikesi vardır."
+      ],
+      "image": "/uploads/product_1770328081783_oqn6gs.png",
+      "media": [
+        {
+          "type": "image",
+          "url": "/uploads/product_1770328081783_oqn6gs.png"
+        },
+        {
+          "type": "image",
+          "url": "/uploads/product_1770328085254_e5eios.jpg"
+        }
+      ],
+      "inStock": true,
+      "createdAt": "2026-02-05T21:49:04.791Z"
+    },
+    {
+      "id": 1770327982755,
+      "name": "Strive Ball No.7",
+      "mainCategory": "Basketbol Topu",
+      "category": "Home Training",
+      "size": "Size 7",
+      "courtType": "",
+      "price": 2450,
+      "originalPrice": null,
+      "shippingIncluded": false,
+      "shippingCost": 450,
+      "rating": 4.5,
+      "features": [
+        "Top çapı : 24 cm",
+        "Malzeme : Poliüretan (PU) Köpük",
+        "CE Certificate of Compliance / Uygunluk Belgeli",
+        "Ana Malzeme Poliüretan",
+        "3 Yaş ve üzeri",
+        "Küçük parçalar içerir.",
+        "Boğulma tehlikesi vardır.",
+        "Ana Malzeme Poliüretan",
+        "3 Yaş ve üzeri",
+        "Küçük parçalar içerir.",
+        "Boğulma tehlikesi vardır."
+      ],
+      "image": "/uploads/product_1770327894642_xhcns7.png",
+      "media": [
+        {
+          "type": "image",
+          "url": "/uploads/product_1770327894642_xhcns7.png"
+        },
+        {
+          "type": "image",
+          "url": "/uploads/product_1770327897849_oki5g8.png"
+        }
+      ],
+      "inStock": true,
+      "createdAt": "2026-02-05T21:46:22.755Z"
+    },
+    {
       "id": 1770040442713,
       "name": "Strive Ball + Mat",
       "mainCategory": "Antrenman Ekipmanları",
@@ -73,58 +147,6 @@
           "date": "2026-02-05T13:33:02.879Z"
         }
       ]
-    },
-    {
-      "id": 1768461859858,
-      "name": "Strive Ball",
-      "mainCategory": "Basketbol Topu",
-      "category": "Basketball",
-      "size": "Size 5, Size 7",
-      "courtType": "Homedoor",
-      "price": 2400,
-      "originalPrice": null,
-      "sizeVariants": [
-        {
-          "size": "Size 7",
-          "price": 2450,
-          "features": [
-            "24  cm",
-            "- Malzeme : Poliüretan (PU) Köpük",
-            "CE Certificate of Compliance / Uygunluk Belgeli"
-          ]
-        },
-        {
-          "size": "Size 5",
-          "price": 2400,
-          "features": [
-            "22.5 cm",
-            "- Malzeme : Poliüretan (PU) Köpük",
-            "CE Certificate of Compliance / Uygunluk Belgeli"
-          ]
-        }
-      ],
-      "shippingIncluded": false,
-      "shippingCost": 450,
-      "rating": 4.5,
-      "features": [
-        "Ana Malzeme Poliüretan",
-        "3 Yaş ve üzeri",
-        "Küçük parçalar içerir.",
-        "Boğulma tehlikesi vardır."
-      ],
-      "image": "/uploads/product_1768461646681_603uij.png",
-      "media": [
-        {
-          "type": "image",
-          "url": "/uploads/product_1768461646681_603uij.png"
-        },
-        {
-          "type": "image",
-          "url": "/uploads/product_1768461793068_00v3ny.jpg"
-        }
-      ],
-      "inStock": true,
-      "createdAt": "2026-01-15T07:24:19.858Z"
     },
     {
       "id": 1768462124443,
